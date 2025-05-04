@@ -1,12 +1,69 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\trabajo_informatica.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|solutionrelative:src\\trabajo_informatica.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\Menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|solutionrelative:src\\Menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\Menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|solutionrelative:src\\Menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "trabajo_informatica.cpp",
+              "DocumentMoniker": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\trabajo_informatica.cpp",
+              "RelativeDocumentMoniker": "src\\trabajo_informatica.cpp",
+              "ToolTip": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\trabajo_informatica.cpp",
+              "RelativeToolTip": "src\\trabajo_informatica.cpp",
+              "ViewState": "AgIAAJUAAAAAAAAAAAAqwK4AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-04T18:30:28.504Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Menu.cpp",
+              "DocumentMoniker": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\Menu.cpp",
+              "RelativeDocumentMoniker": "src\\Menu.cpp",
+              "ToolTip": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\Menu.cpp",
+              "RelativeToolTip": "src\\Menu.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-04T18:21:33.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Menu.h",
+              "DocumentMoniker": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\Menu.h",
+              "RelativeDocumentMoniker": "src\\Menu.h",
+              "ToolTip": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\Menu.h",
+              "RelativeToolTip": "src\\Menu.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAK4AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-05-04T18:20:39.628Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,10 +1,13 @@
-// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA //
+// INCLUSION DE LIBRERIAS Y FICHEROS DE CABECERA //
 
-// Inclusion de Librerías Estandar //
+// Inclusion de Librerias Estandar //
 #include <iostream>
 
-// Inclusion de Librería de OpenGL //
+// Inclusion de Libreria de OpenGL //
 #include "freeglut.h"
+
+// Inclusion de Libreria de ETSIDI //
+#include "ETSIDI.h"
 
 // Inclusion de Ficheros de Encabezado Locales //
 #include "menu.h"
@@ -27,21 +30,26 @@ void OnMouse(int button, int state, int x, int y); // Funcion de raton //
 
 void OnReshape(int w, int h); // Funcion de cambio de tamaño de ventana //
 
+// VARIABLES GLOBALES //
+
+int windowWidth = 800;
+int windowHeight = 600;
+
 // PROGRAMA PRINCIPAL //
 
 int main(int argc, char* argv[])
 {
 	// INICIALIZAR EL GESTOR DE VENTANAS DE GLUT //
 
-	glutInit(&argc, argv); // Inicializa GLUT y procesa los parámetros de la línea de comandos. //
+	glutInit(&argc, argv); // Inicializa GLUT y procesa los parámetros de la linea de comandos //
 
 	// CREAR Y CONFIGURAR LA VENTANA //
 
-	glutInitWindowSize(800, 600); // Establece el tamaño de la ventana a 800x600 píxeles. //
+	glutInitWindowSize(windowWidth, windowHeight); // Establece el tamaño de la ventana a 800x600 pixeles //
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); // Establece el modo de visualización. (doble buffer, RGB, profundidad). //
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); // Establece el modo de visualizacion. (doble buffer, RGB, profundidad) //
 
-	glutCreateWindow("Los Transistores Locos"); // Crea una ventana con el título "MiJuego". //
+	glutCreateWindow("Los Transistores Locos"); // Crea una ventana con el titulo "Los Transistores Locos" //
 
 	// Establece el color de fondo //
 
@@ -55,32 +63,32 @@ int main(int argc, char* argv[])
 
 	glEnable(GL_LIGHT0);
 
-	// Configura la proyección en perspectiva para la escena 3D.
+	// Configura la proyeccion en perspectiva para la escena 3D //
 
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
 
-	gluPerspective(40.0, 800.0 / 600.0, 0.1, 150.0);
+	gluPerspective(40.0, static_cast<float>(windowWidth) / windowHeight, 0.1, 150.0);
 
 	glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
 
 
-	// REGISTRAR LOS CALLBAKS ("Cuando pase esto, llama a esta función".) // 
+	// REGISTRAR LOS CALLBAKS ("Cuando pase esto, llama a esta funcion") // 
 
-	glutDisplayFunc(OnDraw); // Llama a la función OnDraw() para dibujar. //
+	glutDisplayFunc(OnDraw); // Llama a la funcion OnDraw() para dibujar //
 
-	glutTimerFunc(25, OnTimer, 0); // Llama a la función OnTimer() para la animación. //
+	glutTimerFunc(25, OnTimer, 0); // Llama a la funcion OnTimer() para la animacion //
 
-	glutKeyboardFunc(OnKeyboardDown); // Llama a la función OnKeyboardDown() para el teclado. //
+	glutKeyboardFunc(OnKeyboardDown); // Llama a la funcion OnKeyboardDown() para el teclado //
 
-	glutSpecialFunc(OnSpecialKeyboardDown); // Llama a la función OnSpecialKeyboardDown() para el teclado especial. //
+	glutSpecialFunc(OnSpecialKeyboardDown); // Llama a la funcion OnSpecialKeyboardDown() para el teclado especial //
 
-	glutMouseFunc(OnMouse); // Llama a la función OnMouse() para el ratón. //
+	glutMouseFunc(OnMouse); // Llama a la funcion OnMouse() para el raton //
 
-	glutReshapeFunc(OnReshape); // Llama a la función OnReshape() para el cambio de tamaño de la ventana. //
+	glutReshapeFunc(OnReshape); // Llama a la funcion OnReshape() para el cambio de tamaño de la ventana //
 
 	// INICIALIZACIONES //
 
@@ -99,7 +107,7 @@ void OnDraw(void)
 
 	// CODIGO DEL DIBUJO //
 
-	Menu_1.draw_Menu(); // Funcion dentro del Mundo que dibuja los objetos. //
+	Menu_1.draw_Menu(); // Funcion dentro del Mundo que dibuja los objetos //
 
 	glutSwapBuffers(); //NUNCA SE BORRA ESTA LINEA Y NO SE PONE NADA DESPUES DE ELLA//
 }
@@ -117,6 +125,8 @@ void OnKeyboardDown(unsigned char key, int x, int y)
 {
 	// CODIGO DEL TECLADO //
 
+	Menu_1.keyboard_Menu(key); // Funcion dentro del Mundo que procesa el teclado //
+
 	glutPostRedisplay(); // SIEMPRE SE PONE ESTA LINEA PARA REDIBUJAR //
 }
 
@@ -133,10 +143,12 @@ void OnMouse(int button, int state, int x, int y)
 
 	if (state == GLUT_DOWN)
 	{
-		// Convierte la coordenada Y (GLUT recibe Y desde la parte superior) a un sistema con (0,0) en la esquina inferior izquierda //
-		int mouseY = 600 - y; // Dado que la ventana es de 600 pixeles de alto.
+		// Mapear las coordenadas del mouse desde el tamaño real de la ventana al sistema logico 800x600 //
+		int adjusted_X = static_cast<int>(x * (800.0 / windowWidth));
+		int adjusted_Y = static_cast<int>((windowHeight - y) * (600 / windowHeight));
 
-		Menu_1.mouse_Menu(x, mouseY);
+		// Se procesa el clic en el menu utilizando las coordenadas ajustadas //
+		Menu_1.mouse_Menu(adjusted_X, adjusted_Y);
 	}
 
 	glutPostRedisplay(); // SIEMPRE SE PONE ESTA LINEA PARA REDIBUJAR //
@@ -144,17 +156,20 @@ void OnMouse(int button, int state, int x, int y)
 
 void OnReshape(int w, int h)
 {
-	glViewport(0, 0, w, h);
+	windowWidth = w; // Actualiza el ancho de la ventana //
+	windowHeight = h; // Actualiza la altura de la ventana //
 
-	// Actualiza la proyección en perspectiva para la escena 3D.
+	glViewport(0, 0, w, h); // Establece el area de visualización //
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(40.0, (float)w / (float)h, 0.1, 150.0);
+	gluPerspective(40.0, static_cast<float>(w) / h, 0.1, 150.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glutPostRedisplay();
+	glutPostRedisplay(); // SIEMPRE SE PONE ESTA LINEA PARA REDIBUJAR //
 }
+
 
 
 // FIN DEL PROGRAMA //

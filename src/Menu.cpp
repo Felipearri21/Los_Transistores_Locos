@@ -1,112 +1,98 @@
-// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA //
+ï»¿// INCLUSION DE LIBRERIAS Y FICHEROS DE CABECERA //
 
-// Inclusion de Librerías Estandar //
+// Inclusion de Librerias Estandar //
 #include <iostream>
 
-// Inclusion de Fichero de Encabezado Locales //
+// Inclusion de Libreria de OpenGL //
+#include "freeglut.h"
+
+// Inclusion de Libreria de ETSIDI //
+#include "ETSIDI.h"
+
+// Inclusion de Ficheros de Encabezado Locales //
 #include "Menu.h"
 
 // CONSTRUCTORES //
 
 Menu::Menu()
 {
-	// Inicializa el menú en el estado principal.
-
-	set_Menu();
-	set_Estado_Menu(Estado_Menu::MAIN_MENU);
+    set_Menu();
+    set_Estado_Menu(Estado_Menu::TITLE_SCREEN);
 }
 
 // METODOS DE LA CLASE MENU //
 
-// Inicializa el Menú //
-
 void Menu::set_Menu()
 {
-    // Botones del Menú Principal //
-    v_Botones_Main_Menu.push_back({ 200, 400, 400, 50, "Ajedrez Normal" });
-    v_Botones_Main_Menu.push_back({ 200, 330, 400, 50, "Los Alamos" });
-    v_Botones_Main_Menu.push_back({ 200, 260, 400, 50, "Silverman 4x4" });
-    v_Botones_Main_Menu.push_back({ 200, 190, 400, 50, "Ajustes" });
-    // Mensaje de depuración para confirmar carga de botones.
-    std::cout << "Botones del Main Menu: " << v_Botones_Main_Menu.size() << std::endl;
-
-    // Botones del Menú de Ajustes //
-    v_Botones_Settings.push_back({ 200, 400, 400, 50, "Subir Volumen" });
-	v_Botones_Settings.push_back({ 200, 330, 400, 50, "Bajar Volumen" });
-    v_Botones_Settings.push_back({ 200, 260, 400, 50, "Menu Principal" });
-    v_Botones_Settings.push_back({ 200, 190, 400, 50, "Salir" });
-
-	// Botones de la Pantalla de Ajedrez //
-    
-	// Botones de la Pantalla de Los Álamos //
-
-	// Botones de la Pantalla de Silverman 4x4 //
-
-	// Botones de la Pantalla de Game Over //
-
+    // Aqui se pueden agregar inicializaciones adicionales si es necesario //
 }
 
-// Cambia el Estado del Menú //
-
-void Menu::set_Estado_Menu (Estado_Menu estado) 
+void Menu::set_Estado_Menu(Estado_Menu estado)
 {
     Estado_Actual_Menu = estado;
 }
 
-// Muestra el Menú //
-
-void Menu::draw_Menu() 
+void Menu::draw_Menu() // Muestra el Menu //
 {
-    // Como main.cpp configura la proyección en perspectiva, cambiamos temporalmente a una proyección ortográfica.
+    // Configuramos una proyeccion ortografica segun el sistema logico actual (800 x 600) //
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    // Suponemos un sistema de coordenadas 2D de 800x600.
     gluOrtho2D(0, 800, 0, 600);
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
 
-    // Desactivamos la iluminación para dibujar el menú en 2D.
     glPushAttrib(GL_ENABLE_BIT);
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
-    if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU) 
+    if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
-        // Dibujar fondo para menú principal.
-        glColor3f(0.9f, 0.9f, 0.9f);
-        glBegin(GL_QUADS);
-        glVertex2i(0, 0);
-        glVertex2i(800, 0);
-        glVertex2i(800, 600);
-        glVertex2i(0, 600);
+        // Dibujar el fondo del menu principal con una textura //
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal.png").id);
+        glDisable(GL_LIGHTING);
+        glBegin(GL_POLYGON);
+        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color //
+        // Asignamos las coordenadas de textura y los vï¿½rtices del quad (usamos el sistema de 800x600) //
+        glTexCoord2d(0, 1); glVertex2i(0, 0);
+        glTexCoord2d(1, 1); glVertex2i(800, 0);
+        glTexCoord2d(1, 0); glVertex2i(800, 600);
+        glTexCoord2d(0, 0); glVertex2i(0, 600);
         glEnd();
+        glEnable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
 
-        // Dibujar cada botón del menú principal.
-        for (const auto& btn : v_Botones_Main_Menu) 
+        glColor3f(1, 1, 1);
+        draw_BitmapText("Presiona cualquier tecla para comenzar", 220, 150);
+    }
+    else if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU)
+    {
+        // Dibujar el fondo del menu principal con una textura //
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal.png").id);
+        glDisable(GL_LIGHTING);
+        glBegin(GL_POLYGON);
+        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color //
+        // Asignamos las coordenadas de textura y los vertices del quad (usamos el sistema de 800x600) //
+        glTexCoord2d(0, 1); glVertex2i(0, 0);
+        glTexCoord2d(1, 1); glVertex2i(800, 0);
+        glTexCoord2d(1, 0); glVertex2i(800, 600);
+        glTexCoord2d(0, 0); glVertex2i(0, 600);
+        glEnd();
+        glEnable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+
+        for (auto& btn : v_Botones_Main_Menu)
         {
-            // Fondo del botón.
-            glColor3f(0.6f, 0.6f, 0.6f);
-            glBegin(GL_QUADS);
-            glVertex2i(btn.X_Boton, btn.Y_Boton);
-            glVertex2i(btn.X_Boton + btn.Ancho_Boton, btn.Y_Boton);
-            glVertex2i(btn.X_Boton + btn.Ancho_Boton, btn.Y_Boton + btn.Altura_Boton);
-            glVertex2i(btn.X_Boton, btn.Y_Boton + btn.Altura_Boton);
-            glEnd();
-
-            // Texto del botón (en negro).
-            glColor3f(0, 0, 0);
-            float textX = btn.X_Boton + 20;  // Offset para centrar (puedes ajustar).
-            float textY = btn.Y_Boton + btn.Altura_Boton / 2;
-            draw_BitmapText(btn.Texto_Boton, textX, textY);
+            btn.draw_Boton();
         }
     }
 
-    else if (Estado_Actual_Menu == Estado_Menu::SETTINGS) 
+    else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
     {
-        // Dibujar fondo para la pantalla de ajustes.
         glColor3f(0.8f, 0.8f, 1.0f);
         glBegin(GL_QUADS);
         glVertex2i(0, 0);
@@ -115,147 +101,134 @@ void Menu::draw_Menu()
         glVertex2i(0, 600);
         glEnd();
 
-        // Dibujar los botones de la pantalla de ajustes.
-        for (const auto& btn : v_Botones_Settings) 
+        for (auto& btn : v_Botones_Settings)
         {
-            glColor3f(0.6f, 0.6f, 0.6f);
-            glBegin(GL_QUADS);
-            glVertex2i(btn.X_Boton, btn.Y_Boton);
-            glVertex2i(btn.X_Boton + btn.Ancho_Boton, btn.Y_Boton);
-            glVertex2i(btn.X_Boton + btn.Ancho_Boton, btn.Y_Boton + btn.Altura_Boton);
-            glVertex2i(btn.X_Boton, btn.Y_Boton + btn.Altura_Boton);
-            glEnd();
-            glColor3f(0, 0, 0);
-            float textX = btn.X_Boton + 20;
-            float textY = btn.Y_Boton + btn.Altura_Boton / 2;
-            draw_BitmapText(btn.Texto_Boton, textX, textY);
+            btn.draw_Boton();
         }
     }
-
-    else if (Estado_Actual_Menu == Estado_Menu::AJEDREZ)
-    {
-		// Incluir lógica de dibujo para el juego de ajedrez //
-    }
-
-	else if (Estado_Actual_Menu == Estado_Menu::ALAMOS)
-	{
-		// Incluir lógica de dibujo para el juego de ajedrez //
-	}
-
-	else if (Estado_Actual_Menu == Estado_Menu::SILVERMAN)
-	{
-		// Incluir lógica de dibujo para el juego de ajedrez //
-	}
-
-	else if (Estado_Actual_Menu == Estado_Menu::GAME_OVER)
-	{
-		// Incluir lógica de dibujo para la pantalla de Game Over //
-	}
-
-    else if (Estado_Actual_Menu == Estado_Menu::EXIT)
-    {
-        // Incluir lógica de salida del juego // 
-    }
+    // Se pueden introducir otros estados (AJEDREZ, ALAMOS, SILVERMAN, GAME_OVER) segun se requiera //
 
     glPopAttrib();
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);  // Vuelve al modo habitual.
+    glMatrixMode(GL_MODELVIEW);
 }
 
-// Movimiento del Ratón en el Menú //
-
-void Menu::mouse_Menu(int mouse_X, int mouse_Y) 
+void Menu::keyboard_Menu(unsigned char key)
 {
-    if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU) 
+    if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
-        for (const auto& btn : v_Botones_Main_Menu) 
+        Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Cambia al menï¿½ principal al presionar cualquier tecla //
+    }
+
+    if (key == 27) // Tecla ESC //
+    {
+        if (Estado_Actual_Menu != Estado_Menu::SETTINGS)
         {
-            if (
-                mouse_X >= btn.X_Boton && mouse_X <= btn.X_Boton + btn.Ancho_Boton &&
-                mouse_Y >= btn.Y_Boton && mouse_Y <= btn.Y_Boton + btn.Altura_Boton) 
-            {
-                if (btn.Texto_Boton == "Ajedrez Normal") 
-                {
-                    std::cout << "Ajedrez Normal seleccionado" << std::endl;
-                    Estado_Actual_Menu = Estado_Menu::AJEDREZ;  // Aquí iniciarías el juego en modo Normal.
-                }
-
-                else if (btn.Texto_Boton == "Los Alamos") 
-                {
-                    std::cout << "Los Álamos seleccionado" << std::endl;
-                    Estado_Actual_Menu = Estado_Menu::ALAMOS;  // Inicia el juego en modo Los Álamos.
-                }
-
-                else if (btn.Texto_Boton == "Silverman 4x4") 
-                {
-                    std::cout << "Silverman 4x4 seleccionado" << std::endl;
-                    Estado_Actual_Menu = Estado_Menu::SILVERMAN;  // Inicia el juego en modo Silverman 4x4.
-                }
-
-                else if (btn.Texto_Boton == "Ajustes") 
-                {
-                    Estado_Actual_Menu = Estado_Menu::SETTINGS; // Cambia al menú de ajustes.
-                }
-
-                return;
-            }
+            Estado_Actual_Menu = Estado_Menu::SETTINGS; // Abre el menu de ajustes //
         }
-    }
-
-    else if (Estado_Actual_Menu == Estado_Menu::SETTINGS) 
-    {
-        for (const auto& btn : v_Botones_Settings) 
+        else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
         {
-            if (
-                mouse_X >= btn.X_Boton && mouse_X <= btn.X_Boton + btn.Ancho_Boton &&
-                mouse_Y >= btn.Y_Boton && mouse_Y <= btn.Y_Boton + btn.Altura_Boton) 
-            {
-                if (btn.Texto_Boton == "Subir Volumen") 
-                {
-                    std::cout << "Subiendo volumen..." << std::endl;
-                    // Aquí llamarías a la función correspondiente del módulo de audio.
-                }
-
-                if (btn.Texto_Boton == "Bajar Volumen")
-                {
-                    std::cout << "Bajando volumen..." << std::endl;
-                    // Aquí llamarías a la función correspondiente del módulo de audio.
-                }
-
-                else if (btn.Texto_Boton == "Menu Principal") 
-                {
-                    Estado_Actual_Menu = Estado_Menu::MAIN_MENU;
-                }
-
-                else if (btn.Texto_Boton == "Salir") 
-                {
-                    std::cout << "Saliendo de la aplicación..." << std::endl;
-                    exit(0);
-                }
-
-                return;
-            }
+            Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Regresa al menu principal //
         }
-    }
-
-    else if (Estado_Actual_Menu == Estado_Menu::AJEDREZ)
-    {
-		// Incluir lógica del ratón para el juego de ajedrez.
-    }
-
-    else if (Estado_Actual_Menu == Estado_Menu::ALAMOS)
-    {
-        // Incluir lógica del ratón para el juego de ajedrez.
-    }
-
-    else if (Estado_Actual_Menu == Estado_Menu::SILVERMAN)
-    {
-        // Incluir lógica del ratón para el juego de ajedrez.
     }
 }
 
-// DESTRUCTOR //
+void Menu::mouse_Menu(int mouse_X, int mouse_Y)
+{
+    // Cuando se esta en la pantalla de titulo, se cambia directamente al menu principal //
+    if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
+    {
+        Estado_Actual_Menu = Estado_Menu::MAIN_MENU;
+    }
 
-Menu::~Menu() {}
+    if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU)
+    {
+        for (const auto& btn : v_Botones_Main_Menu)
+        {
+            if (btn.contact_Boton(mouse_X, mouse_Y))
+            {
+                switch (btn.ID_Boton)
+                {
+                case 11:
+                    std::cout << "Ajedrez Normal seleccionado" << std::endl;
+                    Estado_Actual_Menu = Estado_Menu::AJEDREZ;
+                    break;
+                case 12:
+                    std::cout << "Los Alamos seleccionado" << std::endl;
+                    Estado_Actual_Menu = Estado_Menu::ALAMOS;
+                    break;
+                case 13:
+                    std::cout << "Silverman 4x4 seleccionado" << std::endl;
+                    Estado_Actual_Menu = Estado_Menu::SILVERMAN;
+                    break;
+                case 14:
+                    std::cout << "Ajustes seleccionado" << std::endl;
+                    Estado_Actual_Menu = Estado_Menu::SETTINGS;
+                    break;
+                default:
+                    std::cout << "Opcion no valida" << std::endl;
+                    exit(0);
+                    break;
+                }
+                return;
+            }
+        }
+    }
+
+    if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
+    {
+        for (const auto& btn : v_Botones_Settings)
+        {
+            if (btn.contact_Boton(mouse_X, mouse_Y))
+            {
+                switch (btn.ID_Boton)
+                {
+                case 21:
+                    std::cout << "Subir Volumen seleccionado" << std::endl;
+                    // Introducir la logica para subir el volumen //
+                    break;
+                case 22:
+                    std::cout << "Bajar Volumen seleccionado" << std::endl;
+                    // Introducir la logica para bajar el volumen //
+                    break;
+                case 23:
+                    std::cout << "Menu Principal seleccionado" << std::endl;
+                    Estado_Actual_Menu = Estado_Menu::MAIN_MENU;
+                    break;
+                case 24:
+                    std::cout << "Salir seleccionado" << std::endl;
+                    Estado_Actual_Menu = Estado_Menu::EXIT;
+                    exit(0);
+                    break;
+                default:
+                    std::cout << "Opcion no valida" << std::endl;
+                    exit(0);
+                    break;
+                }
+                return;
+            }
+        }
+    }
+
+    if (Estado_Actual_Menu == Estado_Menu::AJEDREZ)
+    {
+        // Aqui se puede agregar el manejo del raton para el estado AJEDREZ si es necesario //
+    }
+
+    if (Estado_Actual_Menu == Estado_Menu::ALAMOS)
+    {
+        // Aqui se puede agregar el manejo del raton para el estado ALAMOS si es necesario //
+    }
+
+    if (Estado_Actual_Menu == Estado_Menu::SILVERMAN)
+    {
+        // Aqui se puede agregar el manejo del raton para el estado SILVEMAN si es necesario //
+    }
+
+    if (Estado_Actual_Menu == Estado_Menu::GAME_OVER)
+    {
+        // Aqui se puede agregar el manejo del raton para el estado GAME_OVER si es necesario //
+    }
+}
