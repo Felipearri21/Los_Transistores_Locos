@@ -34,7 +34,9 @@ public:
 
 	void draw_Boton(); // Muestra el Botón //
 
-	bool contact_Boton(int mouse_X, int mouse_Y)const; // Comprueba si el Ratón está en el Boton //
+	bool contact_Boton(int mouse_X, int mouse_Y)const; // Comprueba si el Raton esta en el Boton //
+
+	void sound_Boton(int mouse_X, int mouse_Y)const; // Reproduce el Sonido del Boton //
 		
 private:
 

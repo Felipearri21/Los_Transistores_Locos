@@ -1,20 +1,21 @@
-// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA //
+// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA
 
-// Inclusion de Librerías Estandar //
+// Inclusión de Librerías Estándar
 #include <iostream>
 
-// Inclusion de Librería de OpenGL //
+// Inclusión de Librería de OpenGL
 #include "freeglut.h"
 
-// Inclusion de Librería de ETSIDI //
+// Inclusión de Librería de ETSIDI
 #include "ETSIDI.h"
 
-// Inclusion de Ficheros de Encabezado Locales //
+// Inclusión de Ficheros de Encabezado Locales
 #include "Menu.h"
 #include "Funciones_Globales.h"
 #include "Variables_Globales.h"
+#include "Gestor_Audio.h"
 
-// CONSTRUCTORES //
+// CONSTRUCTORES
 
 Menu::Menu()
 {
@@ -22,11 +23,11 @@ Menu::Menu()
     set_Estado_Menu(Estado_Menu::TITLE_SCREEN);
 }
 
-// METODOS DE LA CLASE MENU //
+// MÉTODOS DE LA CLASE MENU
 
 void Menu::set_Menu()
 {
-    // Aquí se pueden agregar inicializaciones adicionales si es necesario //
+    // Aquí se pueden agregar inicializaciones adicionales si es necesario.
 }
 
 void Menu::set_Estado_Menu(Estado_Menu estado)
@@ -34,10 +35,9 @@ void Menu::set_Estado_Menu(Estado_Menu estado)
     Estado_Actual_Menu = estado;
 }
 
-void Menu::draw_Menu() // Muestra el Menú //
+void Menu::draw_Menu() // Muestra el Menú
 {
     // Se asume que la proyección ya está configurada a la resolución virtual en OnReshape().
-    // Solo hacemos un push/pop de la matriz para conservar el estado.
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
@@ -46,16 +46,14 @@ void Menu::draw_Menu() // Muestra el Menú //
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
-
     if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
-        // Dibujar el fondo del menú principal con una textura.
+        // Dibujar el fondo con textura (pantalla de título).
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal_(1920x1080).png").id);
         glDisable(GL_LIGHTING);
         glBegin(GL_POLYGON);
-        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color.
-        // Asignamos las coordenadas de textura y los vértices del quad (usamos el sistema de 800x600)
+        glColor3f(1, 1, 1); // Sin modificaciones de color.
         glTexCoord2d(0, 1); glVertex2i(0, 0);
         glTexCoord2d(1, 1); glVertex2i((int)virtual_Width, 0);
         glTexCoord2d(1, 0); glVertex2i((int)virtual_Width, (int)virtual_Height);
@@ -64,20 +62,17 @@ void Menu::draw_Menu() // Muestra el Menú //
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
 
-        glColor3f(1, 1, 1);
-
         std::string Texto_Titulo = "Presiona cualquier tecla para comenzar";
-        draw_BitmapText(Texto_Titulo, (virtual_Width - calculate_Ancho_Texto(Texto_Titulo))/2, virtual_Height/4);
+        draw_BitmapText(Texto_Titulo, (virtual_Width - calculate_Ancho_Texto(Texto_Titulo)) / 2, virtual_Height / 4);
     }
     else if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU)
     {
-        // Dibujar el fondo del menú principal con una textura.
+        // Dibujar el fondo del Menú Principal.
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal_(1920x1080).png").id);
         glDisable(GL_LIGHTING);
         glBegin(GL_POLYGON);
-        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color.
-        // Asignamos las coordenadas de textura y los vértices del quad (usamos el sistema de 800x600)
+        glColor3f(1, 1, 1);
         glTexCoord2d(0, 1); glVertex2i(0, 0);
         glTexCoord2d(1, 1); glVertex2i((int)virtual_Width, 0);
         glTexCoord2d(1, 0); glVertex2i((int)virtual_Width, (int)virtual_Height);
@@ -86,14 +81,26 @@ void Menu::draw_Menu() // Muestra el Menú //
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
 
-        for (auto& btn : v_Botones_Main_Menu) // Dibuja los botones del menu principal //
+        // Actualiza el botón central de audio (ID 16) para que muestre el nombre de la pista actual.
+        for (auto& btn : v_Botones_Main_Menu)
+        {
+            if (btn.ID_Boton == 16)
+            {
+                // Utilizamos el accesor que implementamos en Gestor_Audio.
+                btn.Texto_Boton = Gestor_Audio::get_current_Track_Name();
+            }
+
+        }
+
+        // Dibuja todos los botones del Menú Principal (incluyendo los de audio).
+        for (auto& btn : v_Botones_Main_Menu)
         {
             btn.draw_Boton();
         }
     }
-
     else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
     {
+        // Dibujar fondo del Menú de Ajustes.
         glColor3f(0.8f, 0.8f, 1.0f);
         glBegin(GL_QUADS);
         glVertex2i(0, 0);
@@ -101,13 +108,12 @@ void Menu::draw_Menu() // Muestra el Menú //
         glVertex2i((int)virtual_Width, (int)virtual_Height);
         glVertex2i(0, (int)virtual_Height);
         glEnd();
-
-		for (auto& btn : v_Botones_Settings) // Dibuja los botones del menu de ajustes //
+        for (auto& btn : v_Botones_Settings)
         {
             btn.draw_Boton();
         }
     }
-    // Se pueden añadir otros estados (AJEDREZ, ALAMOS, SILVERMAN, GAME_OVER) según se requiera.
+    // Se pueden añadir otros estados (AJEDREZ, ALAMOS, etc.)
 
     glPopAttrib();
     glPopMatrix();
@@ -117,25 +123,25 @@ void Menu::keyboard_Menu(unsigned char key)
 {
     if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
-		Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Cambia al menú principal al presionar cualquier tecla //
+        Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Cambia a MAIN_MENU al presionar cualquier tecla.
     }
 
-    if (key == 27) // Tecla ESC //
+    if (key == 27) // Tecla ESC
     {
-		if (Estado_Actual_Menu != Estado_Menu::SETTINGS)
-		{
-			Estado_Actual_Menu = Estado_Menu::SETTINGS; // Abre el menu de ajustes //
-		}
-		else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
-		{
-			Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Regresa al menú principal //
-		}
+        if (Estado_Actual_Menu != Estado_Menu::SETTINGS)
+        {
+            Estado_Actual_Menu = Estado_Menu::SETTINGS; // Abre el Menú de Ajustes.
+        }
+        else
+        {
+            Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Regresa al Menú Principal.
+        }
     }
 }
 
 void Menu::mouse_Menu(int mouse_X, int mouse_Y)
 {
-    // Cuando se está en la pantalla de título, se cambia directamente al menú principal //
+    // Si estamos en la pantalla de título, cambia directamente al Menú Principal.
     if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
         Estado_Actual_Menu = Estado_Menu::MAIN_MENU;
@@ -143,10 +149,12 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
 
     if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU)
     {
+        // Recorre los botones del Menú Principal.
         for (const auto& btn : v_Botones_Main_Menu)
         {
-            if (btn.contact_Boton(mouse_X, mouse_Y))
+            if (btn.contact_Boton(mouse_X, mouse_Y)) // Se ha pulsado sobre el botón.
             {
+                btn.sound_Boton(mouse_X, mouse_Y); // Reproduce el sonido asociado al botón.
                 switch (btn.ID_Boton)
                 {
                 case 11:
@@ -165,8 +173,18 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
                     std::cout << "Ajustes seleccionado" << std::endl;
                     Estado_Actual_Menu = Estado_Menu::SETTINGS;
                     break;
+                    // Botones de control de audio:
+                case 15: // Botón Audio Prev: Pista anterior.
+                    Gestor_Audio::previous_Track();
+                    break;
+                case 16: // Botón Audio Current: No realiza acción.
+                    // Se podría incluir retroalimentación visual o sonora.
+                    break;
+                case 17: // Botón Audio Next: Pista siguiente.
+                    Gestor_Audio::next_Track();
+                    break;
                 default:
-                    std::cout << "Opcion no valida" << std::endl;
+                    std::cout << "Opción no válida" << std::endl;
                     exit(0);
                     break;
                 }
@@ -174,13 +192,14 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
             }
         }
     }
-
-    if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
+    else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
     {
+        // Gestión de clics para los botones del Menú de Ajustes.
         for (const auto& btn : v_Botones_Settings)
         {
             if (btn.contact_Boton(mouse_X, mouse_Y))
             {
+                btn.sound_Boton(mouse_X, mouse_Y);
                 switch (btn.ID_Boton)
                 {
                 case 21:
@@ -192,7 +211,7 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
                     // Lógica para bajar el volumen.
                     break;
                 case 23:
-                    std::cout << "Menu Principal seleccionado" << std::endl;
+                    std::cout << "Menú Principal seleccionado" << std::endl;
                     Estado_Actual_Menu = Estado_Menu::MAIN_MENU;
                     break;
                 case 24:
@@ -201,7 +220,7 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
                     exit(0);
                     break;
                 default:
-                    std::cout << "Opcion no valida" << std::endl;
+                    std::cout << "Opcion no válida" << std::endl;
                     exit(0);
                     break;
                 }
@@ -210,23 +229,5 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
         }
     }
 
-    if (Estado_Actual_Menu == Estado_Menu::AJEDREZ)
-	{
-		// Aquí se puede agregar el manejo del ratón para el estado AJEDREZ si es necesario //
-	}
-
-    if (Estado_Actual_Menu == Estado_Menu::ALAMOS)
-    {
-        // Aquí se puede agregar el manejo del ratón para el estado ALAMOS si es necesario //
-    }
-    
-    if (Estado_Actual_Menu == Estado_Menu::SILVERMAN)
-    {
-        // Aquí se puede agregar el manejo del ratón para el estado SILVEMAN si es necesario //
-    }
-
-    if (Estado_Actual_Menu == Estado_Menu::GAME_OVER)
-    {
-        // Aquí se puede agregar el manejo del ratón para el estado GAME_OVER si es necesario //
-    }
+    // Se pueden agregar manejos para otros estados (AJEDREZ, ALAMOS, etc.) si es necesario.
 }

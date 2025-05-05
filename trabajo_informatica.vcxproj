@@ -23,6 +23,7 @@
     <ClInclude Include="src\caballo.h" />
     <ClInclude Include="src\Color.h" />
     <ClInclude Include="src\Funciones_Globales.h" />
+    <ClInclude Include="src\Gestor_Audio.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\peon.h" />
     <ClInclude Include="src\pieza.h" />
@@ -37,6 +38,7 @@
     <ClCompile Include="src\caballo.cpp" />
     <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\Funciones_Globales.cpp" />
+    <ClCompile Include="src\Gestor_Audio.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\peon.cpp" />
     <ClCompile Include="src\pieza.cpp" />

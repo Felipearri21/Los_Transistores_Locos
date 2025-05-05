@@ -3,8 +3,12 @@
 // Inclusion de Librerías Estandar //
 #include <iostream>
 
+// Inclusion de Librería de ETSIDI //
+#include "ETSIDI.h"
+
 // Inclusion de Ficheros de Encabezado Locales //
 #include "Boton.h"
+
 
 // CONSTRUCTORES //
 
@@ -65,4 +69,12 @@ bool Boton::contact_Boton(int mouse_X, int mouse_Y)const
         mouse_X >= X_Boton && mouse_X <= X_Boton + Ancho_Boton &&
         mouse_Y >= Y_Boton && mouse_Y <= Y_Boton + Altura_Boton
         );
+}
+
+void Boton::sound_Boton(int mouse_X, int mouse_Y)const
+{
+    if (contact_Boton(mouse_X, mouse_Y) == true)
+    {
+        ETSIDI::play("sonidos/sound_effect_Click.wav");
+    }
 }

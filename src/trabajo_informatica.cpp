@@ -11,6 +11,7 @@
 
 // Inclusion de Ficheros de Encabezado Locales //
 #include "menu.h"
+#include "Gestor_Audio.h"
 #include "Variables_Globales.h"
 
 // DECLARACION DE CLASES //
@@ -90,6 +91,8 @@ int main(int argc, char* argv[])
 
 	// INICIALIZACIONES //
 
+	Gestor_Audio::set_Gestor_Audio(); // Inicializa el Gestor de Audio //
+
 	// BUCLE PRINCIPAL //
 
 	glutMainLoop();
@@ -113,6 +116,13 @@ void OnDraw(void)
 void OnTimer(int value)
 {
 	// CODIGO DE LA ANIMACION //
+
+	// Obtener el estado actual del menu //
+	Estado_Menu estado_Actual = Menu_1.get_Estado_Menu();
+
+	// Actualiza el audio en función del estado //
+	Gestor_Audio::update_Musica(estado_Actual);
+
 
 	glutTimerFunc(25, OnTimer, 0); //Le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer() //
 

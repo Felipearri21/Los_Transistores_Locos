@@ -14,6 +14,7 @@
 
 // Inclusion de Ficheros de Encabezado Locales //
 #include "Boton.h"
+#include "Gestor_Audio.h"
 
 // DEFINICIÓN DE CLASES Y ESTRUCTURAS //
 
@@ -107,12 +108,48 @@ private:
 		50 // Altura del Botón //
 	};
 
+	Boton Boton_Audio_Previous // Botón izquierdo para reproducir pista anterior
+	{
+		15,
+		"Anterior",
+		Color{ 228, 204, 72 },
+		50,    // X (margen izquierdo)
+		100,   // Y (ubicados en la parte baja de la pantalla)
+		200,
+		50
+	};
+
+	Boton Boton_Audio_Current  // Botón central que muestra la canción actual
+	{
+		16,
+		"Ninguna", // Texto inicial; se actualizará en tiempo de ejecución
+		Color{ 228, 204, 72 },
+		860,  // X: (1920 - 200)/2 asumiendo resolución 1920x1080
+		100,  // Y (mismo que los otros de audio)
+		200,
+		50
+	};
+
+	Boton Boton_Audio_Next // Botón derecho para reproducir pista siguiente
+	{
+		17,
+		"Siguiente",
+		Color{ 228, 204, 72 },
+		1670, // X: 1920 - 200 - 50 (margen derecho)
+		100,  // Y
+		200,
+		50
+	};
+
 	std::vector<Boton> v_Botones_Main_Menu
 	{
 		Boton_Ajedrez_Normal,
 		Boton_Los_Alamos,
 		Boton_Silverman_4x4,
-		Boton_Ajustes
+		Boton_Ajustes,
+		Boton_Audio_Previous,
+		Boton_Audio_Current,
+		Boton_Audio_Next
 	};
 
 	// Botones del Menú de Ajustes //
