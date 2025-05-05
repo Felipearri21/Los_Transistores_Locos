@@ -18,6 +18,35 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Boton.h" />
+    <ClInclude Include="src\caballo.h" />
+    <ClInclude Include="src\Color.h" />
+    <ClInclude Include="src\Funciones_Globales.h" />
+    <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\peon.h" />
+    <ClInclude Include="src\pieza.h" />
+    <ClInclude Include="src\reina.h" />
+    <ClInclude Include="src\rey.h" />
+    <ClInclude Include="src\tablero.h" />
+    <ClInclude Include="src\torre.h" />
+    <ClInclude Include="src\Variables_Globales.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Boton.cpp" />
+    <ClCompile Include="src\caballo.cpp" />
+    <ClCompile Include="src\Color.cpp" />
+    <ClCompile Include="src\Funciones_Globales.cpp" />
+    <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\peon.cpp" />
+    <ClCompile Include="src\pieza.cpp" />
+    <ClCompile Include="src\reina.cpp" />
+    <ClCompile Include="src\rey.cpp" />
+    <ClCompile Include="src\tablero.cpp" />
+    <ClCompile Include="src\torre.cpp" />
+    <ClCompile Include="src\trabajo_informatica.cpp" />
+    <ClCompile Include="src\Variables_Globales.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -139,31 +168,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Boton.cpp" />
-    <ClCompile Include="src\caballo.cpp" />
-    <ClCompile Include="src\Color.cpp" />
-    <ClCompile Include="src\Menu.cpp" />
-    <ClCompile Include="src\peon.cpp" />
-    <ClCompile Include="src\pieza.cpp" />
-    <ClCompile Include="src\reina.cpp" />
-    <ClCompile Include="src\rey.cpp" />
-    <ClCompile Include="src\tablero.cpp" />
-    <ClCompile Include="src\torre.cpp" />
-    <ClCompile Include="src\trabajo_informatica.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Boton.h" />
-    <ClInclude Include="src\caballo.h" />
-    <ClInclude Include="src\Color.h" />
-    <ClInclude Include="src\Menu.h" />
-    <ClInclude Include="src\peon.h" />
-    <ClInclude Include="src\pieza.h" />
-    <ClInclude Include="src\reina.h" />
-    <ClInclude Include="src\rey.h" />
-    <ClInclude Include="src\tablero.h" />
-    <ClInclude Include="src\torre.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

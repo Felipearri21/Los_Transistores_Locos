@@ -1,16 +1,18 @@
-ï»¿// INCLUSION DE LIBRERIAS Y FICHEROS DE CABECERA //
+// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA //
 
-// Inclusion de Librerias Estandar //
+// Inclusion de Librerías Estandar //
 #include <iostream>
 
-// Inclusion de Libreria de OpenGL //
+// Inclusion de Librería de OpenGL //
 #include "freeglut.h"
 
-// Inclusion de Libreria de ETSIDI //
+// Inclusion de Librería de ETSIDI //
 #include "ETSIDI.h"
 
 // Inclusion de Ficheros de Encabezado Locales //
 #include "Menu.h"
+#include "Funciones_Globales.h"
+#include "Variables_Globales.h"
 
 // CONSTRUCTORES //
 
@@ -24,7 +26,7 @@ Menu::Menu()
 
 void Menu::set_Menu()
 {
-    // Aqui se pueden agregar inicializaciones adicionales si es necesario //
+    // Aquí se pueden agregar inicializaciones adicionales si es necesario //
 }
 
 void Menu::set_Estado_Menu(Estado_Menu estado)
@@ -32,14 +34,10 @@ void Menu::set_Estado_Menu(Estado_Menu estado)
     Estado_Actual_Menu = estado;
 }
 
-void Menu::draw_Menu() // Muestra el Menu //
+void Menu::draw_Menu() // Muestra el Menú //
 {
-    // Configuramos una proyeccion ortografica segun el sistema logico actual (800 x 600) //
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    gluOrtho2D(0, 800, 0, 600);
-
+    // Se asume que la proyección ya está configurada a la resolución virtual en OnReshape().
+    // Solo hacemos un push/pop de la matriz para conservar el estado.
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
@@ -48,44 +46,47 @@ void Menu::draw_Menu() // Muestra el Menu //
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
+
     if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
-        // Dibujar el fondo del menu principal con una textura //
+        // Dibujar el fondo del menú principal con una textura.
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal.png").id);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal_(1920x1080).png").id);
         glDisable(GL_LIGHTING);
         glBegin(GL_POLYGON);
-        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color //
-        // Asignamos las coordenadas de textura y los vï¿½rtices del quad (usamos el sistema de 800x600) //
+        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color.
+        // Asignamos las coordenadas de textura y los vértices del quad (usamos el sistema de 800x600)
         glTexCoord2d(0, 1); glVertex2i(0, 0);
-        glTexCoord2d(1, 1); glVertex2i(800, 0);
-        glTexCoord2d(1, 0); glVertex2i(800, 600);
-        glTexCoord2d(0, 0); glVertex2i(0, 600);
+        glTexCoord2d(1, 1); glVertex2i((int)virtual_Width, 0);
+        glTexCoord2d(1, 0); glVertex2i((int)virtual_Width, (int)virtual_Height);
+        glTexCoord2d(0, 0); glVertex2i(0, (int)virtual_Height);
         glEnd();
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
 
         glColor3f(1, 1, 1);
-        draw_BitmapText("Presiona cualquier tecla para comenzar", 220, 150);
+
+        std::string Texto_Titulo = "Presiona cualquier tecla para comenzar";
+        draw_BitmapText(Texto_Titulo, (virtual_Width - calculate_Ancho_Texto(Texto_Titulo))/2, virtual_Height/4);
     }
     else if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU)
     {
-        // Dibujar el fondo del menu principal con una textura //
+        // Dibujar el fondo del menú principal con una textura.
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal.png").id);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/menu_principal_(1920x1080).png").id);
         glDisable(GL_LIGHTING);
         glBegin(GL_POLYGON);
-        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color //
-        // Asignamos las coordenadas de textura y los vertices del quad (usamos el sistema de 800x600) //
+        glColor3f(1, 1, 1); // Se garantiza que la textura se muestre sin modificaciones de color.
+        // Asignamos las coordenadas de textura y los vértices del quad (usamos el sistema de 800x600)
         glTexCoord2d(0, 1); glVertex2i(0, 0);
-        glTexCoord2d(1, 1); glVertex2i(800, 0);
-        glTexCoord2d(1, 0); glVertex2i(800, 600);
-        glTexCoord2d(0, 0); glVertex2i(0, 600);
+        glTexCoord2d(1, 1); glVertex2i((int)virtual_Width, 0);
+        glTexCoord2d(1, 0); glVertex2i((int)virtual_Width, (int)virtual_Height);
+        glTexCoord2d(0, 0); glVertex2i(0, (int)virtual_Height);
         glEnd();
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
 
-        for (auto& btn : v_Botones_Main_Menu)
+        for (auto& btn : v_Botones_Main_Menu) // Dibuja los botones del menu principal //
         {
             btn.draw_Boton();
         }
@@ -96,48 +97,45 @@ void Menu::draw_Menu() // Muestra el Menu //
         glColor3f(0.8f, 0.8f, 1.0f);
         glBegin(GL_QUADS);
         glVertex2i(0, 0);
-        glVertex2i(800, 0);
-        glVertex2i(800, 600);
-        glVertex2i(0, 600);
+        glVertex2i((int)virtual_Width, 0);
+        glVertex2i((int)virtual_Width, (int)virtual_Height);
+        glVertex2i(0, (int)virtual_Height);
         glEnd();
 
-        for (auto& btn : v_Botones_Settings)
+		for (auto& btn : v_Botones_Settings) // Dibuja los botones del menu de ajustes //
         {
             btn.draw_Boton();
         }
     }
-    // Se pueden introducir otros estados (AJEDREZ, ALAMOS, SILVERMAN, GAME_OVER) segun se requiera //
+    // Se pueden añadir otros estados (AJEDREZ, ALAMOS, SILVERMAN, GAME_OVER) según se requiera.
 
     glPopAttrib();
     glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
 }
 
 void Menu::keyboard_Menu(unsigned char key)
 {
     if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
-        Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Cambia al menï¿½ principal al presionar cualquier tecla //
+		Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Cambia al menú principal al presionar cualquier tecla //
     }
 
     if (key == 27) // Tecla ESC //
     {
-        if (Estado_Actual_Menu != Estado_Menu::SETTINGS)
-        {
-            Estado_Actual_Menu = Estado_Menu::SETTINGS; // Abre el menu de ajustes //
-        }
-        else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
-        {
-            Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Regresa al menu principal //
-        }
+		if (Estado_Actual_Menu != Estado_Menu::SETTINGS)
+		{
+			Estado_Actual_Menu = Estado_Menu::SETTINGS; // Abre el menu de ajustes //
+		}
+		else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
+		{
+			Estado_Actual_Menu = Estado_Menu::MAIN_MENU; // Regresa al menú principal //
+		}
     }
 }
 
 void Menu::mouse_Menu(int mouse_X, int mouse_Y)
 {
-    // Cuando se esta en la pantalla de titulo, se cambia directamente al menu principal //
+    // Cuando se está en la pantalla de título, se cambia directamente al menú principal //
     if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
     {
         Estado_Actual_Menu = Estado_Menu::MAIN_MENU;
@@ -187,11 +185,11 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
                 {
                 case 21:
                     std::cout << "Subir Volumen seleccionado" << std::endl;
-                    // Introducir la logica para subir el volumen //
+                    // Lógica para subir el volumen.
                     break;
                 case 22:
                     std::cout << "Bajar Volumen seleccionado" << std::endl;
-                    // Introducir la logica para bajar el volumen //
+                    // Lógica para bajar el volumen.
                     break;
                 case 23:
                     std::cout << "Menu Principal seleccionado" << std::endl;
@@ -213,22 +211,22 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
     }
 
     if (Estado_Actual_Menu == Estado_Menu::AJEDREZ)
-    {
-        // Aqui se puede agregar el manejo del raton para el estado AJEDREZ si es necesario //
-    }
+	{
+		// Aquí se puede agregar el manejo del ratón para el estado AJEDREZ si es necesario //
+	}
 
     if (Estado_Actual_Menu == Estado_Menu::ALAMOS)
     {
-        // Aqui se puede agregar el manejo del raton para el estado ALAMOS si es necesario //
+        // Aquí se puede agregar el manejo del ratón para el estado ALAMOS si es necesario //
     }
-
+    
     if (Estado_Actual_Menu == Estado_Menu::SILVERMAN)
     {
-        // Aqui se puede agregar el manejo del raton para el estado SILVEMAN si es necesario //
+        // Aquí se puede agregar el manejo del ratón para el estado SILVEMAN si es necesario //
     }
 
     if (Estado_Actual_Menu == Estado_Menu::GAME_OVER)
     {
-        // Aqui se puede agregar el manejo del raton para el estado GAME_OVER si es necesario //
+        // Aquí se puede agregar el manejo del ratón para el estado GAME_OVER si es necesario //
     }
 }
