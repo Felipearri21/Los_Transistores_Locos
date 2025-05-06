@@ -8,6 +8,7 @@
 
 // Inclusion de Ficheros de Encabezado Locales //
 #include "Boton.h"
+#include "Funciones_Globales.h"
 
 
 // CONSTRUCTORES //
@@ -53,11 +54,17 @@ void Boton::draw_Boton()
 
     // Dibuja el texto //
     glColor3f(0, 0, 0); // Texto de color negro //
-    glRasterPos2i(X_Boton + 20, Y_Boton + Altura_Boton / 2);
-    for (char c : Texto_Boton) 
-    {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-    }
+
+    int anchoTexto = calculate_Ancho_Texto(Texto_Boton);
+    // Si la altura del texto es constante, por ejemplo 20 píxeles, o si tienes:
+    // int altoTexto = calculate_Alto_Texto(Texto_Boton);
+    int altoTexto = 20; // Valor de ejemplo
+
+    // Calcular la posición para centrar el texto en el botón:
+    int x_Texto = X_Boton + (Ancho_Boton - anchoTexto) / 2;
+    int y_Texto = Y_Boton + (Altura_Boton - altoTexto) / 2;
+
+    draw_BitmapText(Texto_Boton, x_Texto, y_Texto);
 }
 
 bool Boton::contact_Boton(int mouse_X, int mouse_Y)const

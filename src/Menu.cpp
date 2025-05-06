@@ -46,7 +46,9 @@ void Menu::draw_Menu() // Muestra el Menú
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
-    if (Estado_Actual_Menu == Estado_Menu::TITLE_SCREEN)
+    switch (Estado_Actual_Menu)
+    {
+    case Estado_Menu::TITLE_SCREEN:
     {
         // Dibujar el fondo con textura (pantalla de título).
         glEnable(GL_TEXTURE_2D);
@@ -62,10 +64,13 @@ void Menu::draw_Menu() // Muestra el Menú
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
 
-        std::string Texto_Titulo = "Presiona cualquier tecla para comenzar";
-        draw_BitmapText(Texto_Titulo, (virtual_Width - calculate_Ancho_Texto(Texto_Titulo)) / 2, virtual_Height / 4);
+        {
+            std::string Texto_Titulo = "Presiona cualquier tecla para comenzar";
+            draw_BitmapText(Texto_Titulo, (virtual_Width - calculate_Ancho_Texto(Texto_Titulo)) / 2, virtual_Height / 4);
+        }
+        break;
     }
-    else if (Estado_Actual_Menu == Estado_Menu::MAIN_MENU)
+    case Estado_Menu::MAIN_MENU:
     {
         // Dibujar el fondo del Menú Principal.
         glEnable(GL_TEXTURE_2D);
@@ -86,19 +91,17 @@ void Menu::draw_Menu() // Muestra el Menú
         {
             if (btn.ID_Boton == 16)
             {
-                // Utilizamos el accesor que implementamos en Gestor_Audio.
                 btn.Texto_Boton = Gestor_Audio::get_current_Track_Name();
             }
-
         }
-
         // Dibuja todos los botones del Menú Principal (incluyendo los de audio).
         for (auto& btn : v_Botones_Main_Menu)
         {
             btn.draw_Boton();
         }
+        break;
     }
-    else if (Estado_Actual_Menu == Estado_Menu::SETTINGS)
+    case Estado_Menu::SETTINGS:
     {
         // Dibujar fondo del Menú de Ajustes.
         glColor3f(0.8f, 0.8f, 1.0f);
@@ -112,8 +115,39 @@ void Menu::draw_Menu() // Muestra el Menú
         {
             btn.draw_Boton();
         }
+        break;
     }
-    // Se pueden añadir otros estados (AJEDREZ, ALAMOS, etc.)
+
+    case Estado_Menu::AJEDREZ:
+    {
+        // Aquí se puede agregar la logica para el estado de Ajedrez.
+        std::cout << "Estado de Ajedrez seleccionado." << std::endl;
+
+        break;
+    }
+
+	case Estado_Menu::ALAMOS:
+	{
+		// Aquí se puede agregar la logica para el estado de Los Álamos.
+		std::cout << "Estado de Los Alamos seleccionado." << std::endl;
+		break;
+	}
+
+    case Estado_Menu::SILVERMAN:
+    {
+        // Aquí se puede agregar la lógica para el estado de Silverman 4x4.
+        std::cout << "Estado de Silverman 4x4 seleccionado." << std::endl;
+        break;
+    }
+
+
+    default:
+    {
+        std::cout << "Estado de menu no valido. Volviendo al menu principal." << std::endl;
+        Estado_Actual_Menu = Estado_Menu::MAIN_MENU;
+        break;
+    }
+    } // Fin del switch
 
     glPopAttrib();
     glPopMatrix();
@@ -174,17 +208,17 @@ void Menu::mouse_Menu(int mouse_X, int mouse_Y)
                     Estado_Actual_Menu = Estado_Menu::SETTINGS;
                     break;
                     // Botones de control de audio:
-                case 15: // Botón Audio Prev: Pista anterior.
+                case 15: 
                     Gestor_Audio::previous_Track();
                     break;
-                case 16: // Botón Audio Current: No realiza acción.
-                    // Se podría incluir retroalimentación visual o sonora.
+                case 16: 
+                    Gestor_Audio::pause_Musica();
                     break;
-                case 17: // Botón Audio Next: Pista siguiente.
+                case 17: 
                     Gestor_Audio::next_Track();
                     break;
                 default:
-                    std::cout << "Opción no válida" << std::endl;
+                    std::cout << "Opcion no valida" << std::endl;
                     exit(0);
                     break;
                 }

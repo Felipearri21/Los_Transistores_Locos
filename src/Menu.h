@@ -15,6 +15,7 @@
 // Inclusion de Ficheros de Encabezado Locales //
 #include "Boton.h"
 #include "Gestor_Audio.h"
+#include "Variables_Globales.h"
 
 // DEFINICIÓN DE CLASES Y ESTRUCTURAS //
 
@@ -124,11 +125,12 @@ private:
 		16,
 		"Ninguna", // Texto inicial; se actualizará en tiempo de ejecución
 		Color{ 228, 204, 72 },
-		860,  // X: (1920 - 200)/2 asumiendo resolución 1920x1080
+		((viewport_Width - 300) / 2),  // X: centrado en el eje x con ancho 300
 		100,  // Y (mismo que los otros de audio)
-		200,
-		50
+		300,  // Ancho del botón
+		50    // Altura del botón
 	};
+
 
 	Boton Boton_Audio_Next // Botón derecho para reproducir pista siguiente
 	{
