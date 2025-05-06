@@ -62,97 +62,107 @@ private:
 	
 	// PARÁMETROS PRIVADOS DE LA CLASE MENU //
 
-	// Botones del Menú Principal //
-
-	Boton Boton_Ajedrez_Normal // Botón para el Modo de Juego Normal //	
+// Grupo A: Botones de modos de juego
+	Boton Boton_Ajedrez_Normal  // Botón para el Modo de Juego Normal
 	{
-		11, // Identificador del Botón //
-		"Ajedrez Normal", // Texto del Botón //
-		Color{ 228, 204, 72 }, // Color del Botón //
-		760, // Coordenada X del Botón //
-		700, // Coordenada Y del Botón //
-		400, // Ancho del Botón //
-		50 // Altura del Botón //
-
-	}; 
-
-	Boton Boton_Los_Alamos // Botón para el Modo de Juego Los Álamos //
-	{
-		12,  // Identificador del Botón //
-		"Los Alamos", // Texto del Botón //
-		Color{ 228, 204, 72 }, // Color del Botón //
-		760, // Coordenada X del Botón //
-		620, // Coordenada Y del Botón //
-		400, // Ancho del Botón //
-		50 // Altura del Botón //
+		11,                     // Identificador del Botón
+		"Ajedrez Normal",       // Texto del Botón
+		Color{228, 204, 72},     // Color del Botón
+		195,                    // X (margen izquierdo)
+		100,                    // Y (todos en Y = 100)
+		250,                    // Ancho del Botón
+		50                      // Altura del Botón
 	};
 
-	Boton Boton_Silverman_4x4 // Botón para el Modo de Juego Silverman 4x4 //
+	Boton Boton_Los_Alamos  // Botón para el Modo de Juego Los Álamos
 	{
-		13, // Identificador del Botón //
-		"Silverman 4x4", // Texto del Botón //
-		Color{ 228, 204, 72 }, // Color del Botón //
-		760, // Coordenada X del Botón //
-		540, // Coordenada Y del Botón //
-		400, // Ancho del Botón //
-		50 // Altura del Botón //
-	};
-
-	Boton Boton_Ajustes // Botón para el Modo de Ajustes //
-	{
-		14, // Identificador del Botón //
-		"Ajustes", // Texto del Botón //
-		Color{ 228, 204, 72 }, // Color del Botón //
-		760, // Coordenada X del Botón //
-		460, // Coordenada Y del Botón //
-		400, // Ancho del Botón //
-		50 // Altura del Botón //
-	};
-
-	Boton Boton_Audio_Previous // Botón izquierdo para reproducir pista anterior
-	{
-		15,
-		"Anterior",
-		Color{ 228, 204, 72 },
-		50,    // X (margen izquierdo)
-		100,   // Y (ubicados en la parte baja de la pantalla)
-		200,
+		12,
+		"Los Alamos",
+		Color{228, 204, 72},
+		515,                    // X = 110 + 250 + 20
+		100,
+		250,
 		50
 	};
 
-	Boton Boton_Audio_Current  // Botón central que muestra la canción actual
+	Boton Boton_Silverman_4x4  // Botón para el Modo de Juego Silverman 4x4
+	{
+		13,
+		"Silverman 4x4",
+		Color{228, 204, 72},
+		835,                    // X = 380 + 250 + 20
+		100,
+		250,
+		50
+	};
+
+	Boton Boton_Ajustes  // Botón para el Modo de Ajustes
+	{
+		14,
+		"Ajustes",
+		Color{228, 204, 72},
+		1155,                    // X = 650 + 250 + 20
+		100,
+		250,
+		50
+	};
+
+	// Grupo B: Botones del área de audio
+	// Se asume que el área de audio comienza en X = 1190
+
+	// Botón central que muestra la canción actual.
+	// Se coloca en la fila superior (Y = 100) y tendrá ancho 310 (150 + 10 + 150).
+	Boton Boton_Audio_Current
 	{
 		16,
-		"Ninguna", // Texto inicial; se actualizará en tiempo de ejecución
-		Color{ 228, 204, 72 },
-		((viewport_Width - 300) / 2),  // X: centrado en el eje x con ancho 300
-		100,  // Y (mismo que los otros de audio)
-		300,  // Ancho del botón
-		50    // Altura del botón
+		"Ninguna",              // Texto inicial (se actualizará en tiempo de ejecución)
+		Color{228, 204, 72},
+		1445,                   // X del grupo de audio
+		160,                    // Y (fila superior)
+		310,                    // Ancho = 150 + 10 + 150
+		50                      // Altura
 	};
 
-
-	Boton Boton_Audio_Next // Botón derecho para reproducir pista siguiente
+	// Los botones "previous" y "next" se colocan en una fila inferior, debajo del botón central.
+	// Se utilizan anchos mínimos de 150, con separación interna de 10.
+	Boton Boton_Audio_Previous
 	{
-		17,
-		"Siguiente",
-		Color{ 228, 204, 72 },
-		1670, // X: 1920 - 200 - 50 (margen derecho)
-		100,  // Y
-		200,
+		15,
+		"<-",
+		Color{228, 204, 72},
+		1445,                   // X (igual que el inicio del grupo de audio)
+		100,                    // Y = 100 + 50 + 10 (fila inferior)
+		150,                    // Ancho mínimo
 		50
 	};
 
+	Boton Boton_Audio_Next
+	{
+		17,
+		"->",
+		Color{228, 204, 72},
+		1605,        // X = 1190 + 150 + 10 = 1350
+		100,                    // Y (fila inferior)
+		150,                    // Ancho mínimo
+		50
+	};
+
+	// Vector con todos los botones del menú
 	std::vector<Boton> v_Botones_Main_Menu
 	{
 		Boton_Ajedrez_Normal,
 		Boton_Los_Alamos,
 		Boton_Silverman_4x4,
 		Boton_Ajustes,
-		Boton_Audio_Previous,
-		Boton_Audio_Current,
+		Boton_Audio_Current,    // Se dibuja el botón central para el audio en la fila superior
+		Boton_Audio_Previous,   // Debajo, se colocan los botones de "previous" y "next"
 		Boton_Audio_Next
 	};
+
+
+
+
+
 
 	// Botones del Menú de Ajustes //
 
