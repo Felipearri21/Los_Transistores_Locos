@@ -1,23 +1,31 @@
-// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA //
+// INCLUSION DE FICHEROS Y LIBRERIAS //
 
-// Inclusion de Librerías Estandar //
+// Libreria de OpenGL //
 
-// Inclusion de Librería de OpenGL //
-#include "freeglut.h"
+#include <freeglut.h>
 
-// Inclusion de Ficheros de Cabecera Locales //
+// Ficheros Locales //
+
 #include "Color.h"
 
-// FUNCIONES DEL COLOR // 
+// METODOS DE LA CLASE //
 
-void Color::set_Color(unsigned char rojo, unsigned char verde, unsigned char azul) // Establece el color. //
+// Cosntructor //
+Color::Color() : R(255), G(255), B(255) {}
+
+Color::Color(unsigned char r, unsigned char g, unsigned char b)
+    : R(r), G(g), B(b) 
 {
-	Rojo_Color = rojo;
-	Verde_Color = verde;
-	Azul_Color = azul;
 }
 
-void Color::implement_Color() // Implementa el color. //
+void Color::set_Color(unsigned char r, unsigned char g, unsigned char b) 
 {
-	glColor3ub (Rojo_Color, Verde_Color, Azul_Color);
+    R = r;
+    G = g;
+    B = b;
+}
+
+void Color::implement_Color() const 
+{
+    glColor3ub(R, G, B);
 }

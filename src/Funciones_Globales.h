@@ -1,14 +1,14 @@
 #pragma once
 
-// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA //
+// INCLUSION DE FICHEROS Y LIBRERIAS //
 
-// Inclusion de Librerías Estandar //
+// Librerias Estandar //
 #include <string>
 
-// Inclusion de Librería de OpenGL //
+// Librerias de OpenGL //
 #include "freeglut.h"
 
-// Inclusion de Ficheros de Cabecera Locales //
+// Ficheros Locales //
 
 // FUNCIONES GLOBALES DE ESCRITURA Y GESTION DE TEXTO //
 

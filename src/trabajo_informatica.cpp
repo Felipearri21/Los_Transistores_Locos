@@ -1,215 +1,109 @@
-// INCLUSIÓN DE LIBRERÍAS Y FICHEROS DE CABECERA //
+//INCLUSION DE FICHEROS Y LIBRERIAS //
 
-// Inclusion de Librerías Estandar //
-#include <iostream>
+// Librerias de OpenGL //
+#include <freeglut.h>
 
-// Inclusion de Librería de OpenGL //
-#include "freeglut.h"
+// Ficheros Locales //
 
-// Inclusion de Librería de ETSIDI //
-#include "ETSIDI.h"
-
-// Inclusion de Ficheros de Encabezado Locales //
-#include "menu.h"
+#include "Menu.h"
 #include "Gestor_Audio.h"
 #include "Variables_Globales.h"
 
 // DECLARACION DE CLASES //
 
-Menu Menu_1; // Objeto de la clase Menu. //
+Menu Menu_1;
+Gestor_Audio Gestor_Audio_1;
 
-// PROTOTIPOS DE LAS FUNCIONES DE GLUT //
+// PROTOTIPOS DE FUNCIONES DE GLUT //
 
-void OnDraw(void); // Funcion de dibujo //
+void OnDisplay();
+void OnReshape(int width, int height);
+void OnKeyboard(unsigned char key, int x, int y);
+void OnMouse(int button, int state, int x, int y);
+void OnPassiveMouseMotion(int x, int y);
 
-void OnTimer(int value); // Funcion de animacion //
-
-void OnKeyboardDown(unsigned char key, int x, int y); // Funcion de teclado //
-
-void OnSpecialKeyboardDown(int key, int x, int y); // Funcion de teclado especial //
-
-void OnMouse(int button, int state, int x, int y); // Funcion de raton //
-
-void OnReshape(int w, int h); // Funcion de cambio de tamaño de ventana //
-
-// PROGRAMA PRINCIPAL //
-
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
-	// INICIALIZAR EL GESTOR DE VENTANAS DE GLUT //
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(virtual_Width / 2, virtual_Height / 2);
+    glutCreateWindow("Los Transistores Locos presenta: Ajedrez Edition");
 
-	glutInit(&argc, argv); // Inicializa GLUT y procesa los parámetros de la línea de comandos //
+    glutDisplayFunc(OnDisplay);
+    glutReshapeFunc(OnReshape);
+    glutKeyboardFunc(OnKeyboard);
+    glutMouseFunc(OnMouse);
+    glutPassiveMotionFunc(OnPassiveMouseMotion);
+	glutFullScreen();   
 
-	// CREAR Y CONFIGURAR LA VENTANA //
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glutInitWindowSize(window_Width, window_Height); // Establece el tamaño de la ventana a 1920x1080 píxeles //
+    Gestor_Audio::set_Gestor_Audio();
+    Menu_1.set_Fondo("imagenes/menu_principal_(1920x1080).png");
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); // Establece el modo de visualización. (doble buffer, RGB, profundidad) //
-
-	glutCreateWindow("Los Transistores Locos"); // Crea una ventana con el título "Los Transistores Locos" //
-
-	glutFullScreen(); // Pone la ventana en modo pantalla completa //
-
-	// Establece el color de fondo //
-
-	glClearColor(1, 1, 1, 1);
-
-	glEnable(GL_DEPTH_TEST);
-
-	glEnable(GL_COLOR_MATERIAL);
-
-	glEnable(GL_LIGHTING);
-
-	glEnable(GL_LIGHT0);
-
-	// Configura la proyección en perspectiva para la escena 3D //
-
-	glMatrixMode(GL_PROJECTION);
-
-	glLoadIdentity();
-
-	gluPerspective(40.0, (float)1920 / 1080, 0.1, 150.0);
-
-	glMatrixMode(GL_MODELVIEW);
-
-	glLoadIdentity();
-
-
-	// REGISTRAR LOS CALLBAKS ("Cuando pase esto, llama a esta función") // 
-
-	glutDisplayFunc(OnDraw); // Llama a la función OnDraw() para dibujar //
-
-	glutTimerFunc(25, OnTimer, 0); // Llama a la función OnTimer() para la animación //
-
-	glutKeyboardFunc(OnKeyboardDown); // Llama a la función OnKeyboardDown() para el teclado //
-
-	glutSpecialFunc(OnSpecialKeyboardDown); // Llama a la función OnSpecialKeyboardDown() para el teclado especial //
-
-	glutMouseFunc(OnMouse); // Llama a la función OnMouse() para el ratón //
-
-	glutReshapeFunc(OnReshape); // Llama a la función OnReshape() para el cambio de tamaño de la ventana //
-
-	// INICIALIZACIONES //
-
-	Gestor_Audio::set_Gestor_Audio(); // Inicializa el Gestor de Audio //
-
-	// BUCLE PRINCIPAL //
-
-	glutMainLoop();
-
-	return 0;
+    glutMainLoop();
+    return 0;
 }
 
-// DEFINICIONES DE FUNCIONES DE GLUT //
-
-void OnDraw(void)
+void OnDisplay()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //SIEMPRE SE PONE ESTA LINEA ANTES DE DIBUJAR//
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// CODIGO DEL DIBUJO //
+    Gestor_Audio::update_Musica(Menu_1.get_Estado_Menu());
 
-	Menu_1.draw_Menu(); // Funcion dentro del Mundo que dibuja los objetos //
+    Menu_1.draw_Menu();
 
-	glutSwapBuffers(); //NUNCA SE BORRA ESTA LINEA Y NO SE PONE NADA DESPUES DE ELLA//
+    glutSwapBuffers();
 }
 
-void OnTimer(int value)
+void OnReshape(int width, int height)
 {
-	// CODIGO DE LA ANIMACION //
-
-	// Obtener el estado actual del menu //
-	Estado_Menu estado_Actual = Menu_1.get_Estado_Menu();
-
-	// Actualiza el audio en función del estado //
-	Gestor_Audio::update_Musica(estado_Actual);
-
-
-	glutTimerFunc(25, OnTimer, 0); //Le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer() //
-
-	glutPostRedisplay(); // SIEMPRE SE PONE ESTA LINEA PARA REDIBUJAR //
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, virtual_Width, 0, virtual_Height);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
-void OnKeyboardDown(unsigned char key, int x, int y)
+void OnKeyboard(unsigned char key, int x, int y)
 {
-	// CODIGO DEL TECLADO //
-
-	Menu_1.keyboard_Menu(key); // Funcion dentro del Mundo que procesa el teclado //
-
-	glutPostRedisplay(); // SIEMPRE SE PONE ESTA LINEA PARA REDIBUJAR //
-}
-
-void OnSpecialKeyboardDown(int key, int x, int y)
-{
-	// CODIGO DEL TECLADO ESPECIAL //
-
-	glutPostRedisplay(); // SIEMPRE SE PONE ESTA LINEA PARA REDIBUJAR //
+    Menu_1.keyboard_Menu(key);
+    glutPostRedisplay();
 }
 
 void OnMouse(int button, int state, int x, int y)
 {
-	// CODIGO DEL RATON //
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        int realWidth = glutGet(GLUT_WINDOW_WIDTH);
+        int realHeight = glutGet(GLUT_WINDOW_HEIGHT);
+        float escalaX = virtual_Width / static_cast<float>(realWidth);
+        float escalaY = virtual_Height / static_cast<float>(realHeight);
 
-	if (state == GLUT_DOWN)
-	{
-		//  Quitar el offset del viewport (area de visualizacion) //
-		int adjusted_X = x - viewport_X;
-		int adjusted_Y = y - viewport_Y;
+        int x_virtual = static_cast<int>(x * escalaX);
+        int y_virtual = static_cast<int>((realHeight - y) * escalaY);
 
-		// Invertir la coordenada Y (en GLUT el origen esta en la parte superior) //
-		adjusted_Y = viewport_Height - adjusted_Y;
+        Menu_1.mouse_Menu(x_virtual, y_virtual);
 
-		// Escalar las coordenadas reales a la resolución virtual.
-		float scale_X = virtual_Width / viewport_Width;
-		float scale_Y = virtual_Height / viewport_Height;
-		int virtual_X = (int)(adjusted_X * scale_X);
-		int virtual_Y = (int)(adjusted_Y * scale_Y);
-
-		Menu_1.mouse_Menu(virtual_X, virtual_Y);
-
-	}
-
-	glutPostRedisplay(); // SIEMPRE SE PONE ESTA LINEA PARA REDIBUJAR //
+        glutPostRedisplay();
+    }
 }
 
-void OnReshape(int w, int h)
+void OnPassiveMouseMotion(int x, int y)
 {
-	window_Width = w;
-	window_Height = h;
+    int realWidth = glutGet(GLUT_WINDOW_WIDTH);
+    int realHeight = glutGet(GLUT_WINDOW_HEIGHT);
+    float escalaX = virtual_Width / static_cast<float>(realWidth);
+    float escalaY = virtual_Height / static_cast<float>(realHeight);
 
-	float window_Aspect = (float)w / h;
-	float virtual_Aspect = virtual_Width / virtual_Height;
+    int x_virtual = static_cast<int>(x * escalaX);
+    int y_virtual = static_cast<int>((realHeight - y) * escalaY);
 
-	if (window_Aspect > virtual_Aspect)
-	{
-		// La ventana es más ancha que la virtual //
+    Menu_1.actualizar_Hover(x_virtual, y_virtual);
 
-		viewport_Height = h;
-		viewport_Width = (int)(h * virtual_Aspect);
-		viewport_X = (w - viewport_Width) / 2;
-		viewport_Y = 0;
-	}
-	else
-	{
-		// La ventana es más alta (o relación igual).
-		viewport_Width = w;
-		viewport_Height = (int)(w / virtual_Aspect);
-		viewport_X = 0;
-		viewport_Y = (h - viewport_Height) / 2;
-	}
-
-	glViewport(viewport_X, viewport_Y, viewport_Width, viewport_Height);
-
-	// Configura la proyección ortográfica usando la resolución virtual.
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0, virtual_Width, 0, virtual_Height);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glutPostRedisplay();
+    glutPostRedisplay();
 }
 
-
-
-
-// FIN DEL PROGRAMA //
+// Fin del código

@@ -1,102 +1,80 @@
-#pragma once
+Ôªø#pragma once
 
-// INCLUSI”N DE LIBRERÕAS Y FICHEROS DE CABECERA
+// INCLUSION DE FICHEROS Y LIBRERIAS //
 
-// InclusiÛn de LibrerÌas Estandar //
+// Librerias Estandar //
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <string>
 #include <vector>
 
-// InclusiÛn de Libreria de ETSIDI //
+// Libreria ETSIDI //
 #include "ETSIDI.h"
 
-// InclsuiÛn de Ficheros de Encabezado Locales //
+// Ficheros Locales //
+
 #include "Menu.h"
 
-// DeclaraciÛn adelantada del enumerado (necesario para el compilador) //
+// DECLARACION DE CLASE GESTOR AUDIO (Se necesita para el compilador)//
+
 enum class Estado_Menu;
 
-// Estructura que representa una cancion //
+// DECLARACION DE LA ESTRUCTURA CANCION //
 
-struct Cancion 
+struct Cancion
 {
-    std::string nombre_Cancion;   // Titulo de la cancion //
-    std::string ruta_Cancion;     // Ruta del archivo de audio //
-    int duracion_Cancion;         // DuraciÛn de la cancion (en segundos) //
+    std::string nombre_Cancion;
+    std::string ruta_Cancion;
+    int duracion_Cancion;
 
-    // Constructor //
-    Cancion
-    (
-        const std::string& nombre,
-        const std::string& ruta,
-        int duracion
-    )
-    {
-		nombre_Cancion = nombre;
-		ruta_Cancion = ruta;
-		duracion_Cancion = duracion;
+    Cancion(const std::string& nombre, const std::string& ruta, int duracion)
+        : nombre_Cancion(nombre), ruta_Cancion(ruta), duracion_Cancion(duracion) {
     }
 };
 
+// DECLARACION DE LA CLASE GESTOR AUDIO //
+
+
 class Gestor_Audio
 {
-public:
-    // M…TODOS PRINCIPALES DE LA CLASE GESTOR AUDIO
 
-    // Inicializa el Gestor de Audio (carga la playlist y establece la semilla aleatoria) //
+public:
+
+	// METODOS PUBLICOS DE LA CLASE //
+
+	// Constructor //
+
     static void set_Gestor_Audio();
 
-    // Cambia el volumen del audio (stub; adaptar si ETSIDI dispone de dicha funcion) //
+	// Metodos de la Clase //
+
     static void set_Volumen(int volumen);
 
-	// Actualiza la m˙sica del juego dependiendo del Estado del Menu actual //
     static void update_Musica(Estado_Menu estado);
 
-    // Fuerza el cambio a la siguiente pista de audio //
     static void next_Track();
-
-    // Fuerza el cambio a la pista anterior de audio //
     static void previous_Track();
 
-    // Detiene la musica actual //
     static void stop_Musica();
-
-
-    // Pausa la musica //
     static void pause_Musica();
 
-    // Reproduce la musica de la pantalla de titulo //
     static void play_Title_Screen_Music();
 
-    // Accesor para obtener el indice de la pista actual.
     static int get_current_Track();
-
-    // Accesor para obtener el nombre de la pista actual (para mostrar en la interfaz).
     static std::string get_current_Track_Name();
 
 private:
-    // Vector de pistas de audio (almacena objetos Cancion).
+
+	// PARAMETROS PRIVADOS DE LA CLASE //
+
     static std::vector<Cancion> v_playlist_Musica;
-
-    // N˙mero de la pista de audio actual (Ìndice en el vector).
     static int current_Track;
-
-    // Variable booleana que indica si la musica se esta reproduciendo //
     static bool playing_Musica;
-
-
-    // Variable booleana que indica si la musica esta pausada //
     static bool paused_Track;
-
-    // Guarda el tiempo de inicio de la pista actual (utilizando <ctime>).
     static time_t track_Start_Time;
-
-    // Reproduce la pista de audio utilizando la ruta proporcionada.
-    // El par·metro "repeat" indica si se debe repetir la pista.
+    static bool usuario_Ha_Cambiado_Pista;
+    static bool reproducirAleatoria_Pendiente;  // ‚Üê Declaraci√≥n necesaria para cambiar canci√≥n tras detener
     static void play_Music(const std::string& track, bool repeat = true);
-
-    // Selecciona una pista aleatoria de la lista de reproducciÛn y actualiza current_Track.
     static void random_Track();
 };
