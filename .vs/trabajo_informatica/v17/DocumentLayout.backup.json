@@ -1,10 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\",
+  "WorkspaceRootPath": "C:\\Users\\alvar\\Documents\\Escritorio\\GitHub\\Los_Transistores_Locos\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\trabajo_informatica.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|solutionrelative:src\\trabajo_informatica.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|C:\\Users\\alvar\\Documents\\Escritorio\\GitHub\\Los_Transistores_Locos\\src\\Funciones_Globales.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{77FBCB5F-327F-43FC-94FA-1C84D61EC336}|trabajo_informatica.vcxproj|solutionrelative:src\\Funciones_Globales.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "trabajo_informatica.cpp",
-              "DocumentMoniker": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\trabajo_informatica.cpp",
-              "RelativeDocumentMoniker": "src\\trabajo_informatica.cpp",
-              "ToolTip": "C:\\Users\\G531GW\\Documents\\GitHub\\Los_Transistores_Locos\\src\\trabajo_informatica.cpp",
-              "RelativeToolTip": "src\\trabajo_informatica.cpp",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACQAAAAVAAAAAAAAAA==",
+              "Title": "Funciones_Globales.cpp",
+              "DocumentMoniker": "C:\\Users\\alvar\\Documents\\Escritorio\\GitHub\\Los_Transistores_Locos\\src\\Funciones_Globales.cpp",
+              "RelativeDocumentMoniker": "src\\Funciones_Globales.cpp",
+              "ToolTip": "C:\\Users\\alvar\\Documents\\Escritorio\\GitHub\\Los_Transistores_Locos\\src\\Funciones_Globales.cpp",
+              "RelativeToolTip": "src\\Funciones_Globales.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-18T15:00:27.117Z",
+              "WhenOpened": "2025-05-24T15:39:11.458Z",
               "EditorCaption": ""
             }
           ]

@@ -55,6 +55,9 @@ void Menu::set_Fondo(const std::string& ruta)
 {
     Fondo_Actual_Menu = ruta;
 }
+const std::string& Menu::get_Fondo() const {
+    return Fondo_Actual_Menu;
+}
 
 void Menu::draw_Menu() 
 {
@@ -272,3 +275,4 @@ void Menu::draw_Fondo(const std::string& ruta)
     glEnd();
     glDisable(GL_TEXTURE_2D);
 }
+

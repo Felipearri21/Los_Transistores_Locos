@@ -8,11 +8,15 @@
 #include "Menu.h"
 #include "Gestor_Audio.h"
 #include "Variables_Globales.h"
+#include "tablero.h"
+#include "Funciones_Globales.h"
 
 // DECLARACION DE CLASES //
 
 Menu Menu_1;
 Gestor_Audio Gestor_Audio_1;
+Tablero* tablero;
+Estado_Menu estado_anterior = Estado_Menu::TITLE_SCREEN;
 
 // PROTOTIPOS DE FUNCIONES DE GLUT //
 
@@ -53,7 +57,74 @@ void OnDisplay()
 
     Gestor_Audio::update_Musica(Menu_1.get_Estado_Menu());
 
-    Menu_1.draw_Menu();
+    Estado_Menu estado_actual = Menu_1.get_Estado_Menu();
+
+    // Si se entra por primera vez en un modo de juego, crea el tablero correspondiente
+    if ((estado_actual == Estado_Menu::AJEDREZ ||
+        estado_actual == Estado_Menu::ALAMOS ||
+        estado_actual == Estado_Menu::SILVERMAN) &&
+        estado_actual != estado_anterior)
+    {
+        // Si ya había un tablero, lo borramos
+        if (tablero) {
+            delete tablero;
+            tablero = nullptr;
+        }
+
+        switch (estado_actual) {
+        case Estado_Menu::AJEDREZ:
+            tablero = new Tablero(ModoJuego::NORMAL);
+            break;
+        case Estado_Menu::ALAMOS:
+            tablero = new Tablero(ModoJuego::ALAMOS);
+            break;
+        case Estado_Menu::SILVERMAN:
+            tablero = new Tablero(ModoJuego::SILVERMAN);
+            break;
+        default:
+            break;
+        }
+
+        // Establecer fondo visual para todos los modos de juego
+        Menu_1.set_Fondo("imagenes/fondo_juego_(1920x1080).png");
+    }
+
+    // Si está en un modo de juego, dibuja el tablero
+    if (estado_actual == Estado_Menu::AJEDREZ ||
+        estado_actual == Estado_Menu::ALAMOS ||
+        estado_actual == Estado_Menu::SILVERMAN)
+    {
+        Menu_1.draw_Fondo(Menu_1.get_Fondo());
+
+        if (tablero)
+            tablero->dibujarTablero();
+
+        // Mostrar el texto del modo actual arriba
+        std::string texto;
+        switch (estado_actual) {
+        case Estado_Menu::AJEDREZ: texto = "AJEDREZ NORMAL"; break;
+        case Estado_Menu::ALAMOS: texto = "LOS ALAMOS 6x6"; break;
+        case Estado_Menu::SILVERMAN: texto = "SILVERMAN 4x4"; break;
+        default: break;
+        }
+
+        int ancho = calculate_Ancho_Texto(texto, GLUT_BITMAP_HELVETICA_18);
+        int x = (virtual_Width - ancho) / 2;
+        int y = virtual_Height - 80;
+        glColor3f(1.0f, 1.0f, 0.6f);
+        draw_BitmapText(texto, x, y);
+    }
+    else {
+        // Si vuelve al menú, borra el tablero si existe
+        if (tablero) {
+            delete tablero;
+            tablero = nullptr;
+        }
+
+        Menu_1.draw_Menu();
+    }
+
+    estado_anterior = estado_actual;
 
     glutSwapBuffers();
 }

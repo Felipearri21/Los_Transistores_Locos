@@ -32,6 +32,7 @@
     <ClInclude Include="src\tablero.h" />
     <ClInclude Include="src\torre.h" />
     <ClInclude Include="src\Variables_Globales.h" />
+    <ClInclude Include="src\vector2d.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Boton.cpp" />
@@ -48,6 +49,7 @@
     <ClCompile Include="src\torre.cpp" />
     <ClCompile Include="src\trabajo_informatica.cpp" />
     <ClCompile Include="src\Variables_Globales.cpp" />
+    <ClCompile Include="src\vector2d.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

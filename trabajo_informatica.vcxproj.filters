@@ -54,6 +54,9 @@
     <ClInclude Include="src\Variables_Globales.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\vector2d.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Boton.cpp">
@@ -96,6 +99,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\Variables_Globales.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vector2d.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

@@ -38,9 +38,11 @@ public:
     void set_Menu(); 
     void set_Estado_Menu(Estado_Menu estado);
     void set_Fondo(const std::string& ruta);
+    const std::string& get_Fondo() const;
 
 
     void draw_Menu();
+    void draw_Fondo(const std::string& ruta);
 
     void keyboard_Menu(unsigned char key);
     void mouse_Menu(int mouse_X, int mouse_Y);
@@ -62,5 +64,4 @@ private:
 
     void execute_Accion_Boton(int id);
 
-    void draw_Fondo(const std::string& ruta);
 };
