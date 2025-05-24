@@ -14,6 +14,7 @@
 // DECLARACION DE CLASES //
 
 Menu Menu_1;
+Menu Menu_2;
 Gestor_Audio Gestor_Audio_1;
 Tablero* tablero;
 Estado_Menu estado_anterior = Estado_Menu::TITLE_SCREEN;
@@ -86,7 +87,7 @@ void OnDisplay()
         }
 
         // Establecer fondo visual para todos los modos de juego
-        Menu_1.set_Fondo("imagenes/fondo_juego_(1920x1080).png");
+        Menu_2.set_Fondo("imagenes/fondo_juego_(1920x1080).png");
     }
 
     // Si está en un modo de juego, dibuja el tablero
@@ -94,7 +95,7 @@ void OnDisplay()
         estado_actual == Estado_Menu::ALAMOS ||
         estado_actual == Estado_Menu::SILVERMAN)
     {
-        Menu_1.draw_Fondo(Menu_1.get_Fondo());
+        Menu_2.draw_Fondo(Menu_2.get_Fondo());
 
         if (tablero)
             tablero->dibujarTablero();

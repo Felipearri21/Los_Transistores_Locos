@@ -1,32 +1,8 @@
-﻿  Boton.cpp
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\Boton.cpp(53,43): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\Boton.cpp(53,34): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-  caballo.cpp
-  Color.cpp
-  Funciones_Globales.cpp
-  Gestor_Audio.cpp
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\Gestor_Audio.cpp(129,75): warning C4267: '=': conversión de 'size_t' a 'int'; posible pérdida de datos
-  Menu.cpp
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\Menu.cpp(145,19): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\Menu.cpp(151,19): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\Menu.cpp(153,45): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\Menu.cpp(153,42): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-  peon.cpp
-  pieza.cpp
-  reina.cpp
-  rey.cpp
-  tablero.cpp
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\tablero.cpp(31,21): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\tablero.cpp(32,21): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-  torre.cpp
-  trabajo_informatica.cpp
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(33,58): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(33,38): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(112,15): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+﻿  trabajo_informatica.cpp
+C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(34,58): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(34,38): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
 C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(113,15): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(115,35): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(115,32): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-  Variables_Globales.cpp
-  vector2d.cpp
-  Generando código...
+C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(114,15): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(116,35): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\src\trabajo_informatica.cpp(116,32): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
   trabajo_informatica.vcxproj -> C:\Users\alvar\Documents\Escritorio\GitHub\Los_Transistores_Locos\bin\trabajo_informatica.exe
