@@ -1,33 +1,31 @@
 #pragma once
 #include "ETSIDI.h"
 #include "freeglut.h"
-#include "caballo.h"
-#include "rey.h"
-#include "reina.h"
-#include "torre.h"
-#include "peon.h"
-#include "pieza.h"
+#include "modojuego.h"
 #include "vector2d.h"
-
-enum class ModoJuego {
-    NORMAL,     // 8x8
-    ALAMOS,     // 6x6
-    SILVERMAN   // 4x4
-};
+#include <vector>
+#include "pieza.h"
+#include "peon.h"
 
 class Tablero {
 private:
-    int filas;
-    int columnas;
-    float tamCasilla;      // Tamaño en pantalla
     ModoJuego modo;
+    ModoJuegoConfig config;
+    float tamCasilla;
+    Vector2D origenTablero;
 
-    Vector2D origenTablero; // Esquina inferior izquierda
+    std::vector<Pieza*> piezas;
+    void inicializarPiezas();
+    Vector2D casillaAPosicion(int col, int fila) const;
 
 public:
-    Tablero(ModoJuego modo);
+    Tablero(ModoJuego modoSeleccionado);
     void dibujarTablero() const;
+    void dibujarPiezas() const;
 
-    int getFilas() const { return filas; }
-    int getColumnas() const { return columnas; }
+    int getFilas() const { return config.filas; }
+    int getColumnas() const { return config.columnas; }
+    bool puedeComerseAliados() const { return config.puedeComerseAliados; }
+    const std::vector<TipoPieza>& getPiezasPermitidas() const { return config.piezasPermitidas; }
+    ~Tablero();
 };

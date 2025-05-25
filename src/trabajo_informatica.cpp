@@ -97,8 +97,11 @@ void OnDisplay()
     {
         Menu_2.draw_Fondo(Menu_2.get_Fondo());
 
-        if (tablero)
+        if (tablero) {
             tablero->dibujarTablero();
+            tablero->dibujarPiezas();
+        }
+            
 
         // Mostrar el texto del modo actual arriba
         std::string texto;

@@ -3,9 +3,10 @@
 #include "freeglut.h"
 #include "pieza.h"
 
-class peon : public pieza//hereda de pieza
-{
-	peon(double x, double y, char color) : pieza(x, y, color) {};
+class Peon : public Pieza {
+public:
+    Peon(Vector2D pos, bool blanca);
 
+    void dibujar() const override;
+    std::vector<Vector2D> calcularMovimientosValidos(const Tablero& tablero) const override;
 };
-

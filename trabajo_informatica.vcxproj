@@ -25,6 +25,7 @@
     <ClInclude Include="src\Funciones_Globales.h" />
     <ClInclude Include="src\Gestor_Audio.h" />
     <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\modojuego.h" />
     <ClInclude Include="src\peon.h" />
     <ClInclude Include="src\pieza.h" />
     <ClInclude Include="src\reina.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="src\Funciones_Globales.cpp" />
     <ClCompile Include="src\Gestor_Audio.cpp" />
     <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\modojuego.cpp" />
     <ClCompile Include="src\peon.cpp" />
     <ClCompile Include="src\pieza.cpp" />
     <ClCompile Include="src\reina.cpp" />
