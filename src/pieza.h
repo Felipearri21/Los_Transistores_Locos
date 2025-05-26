@@ -21,7 +21,7 @@ public:
 
     virtual ~Pieza() {}
 
-    virtual void dibujar() const = 0;
+    virtual void dibujar()  = 0;
     virtual std::vector<Vector2D> calcularMovimientosValidos(const Tablero& tablero) const = 0;
 
     void moverA(Vector2D nuevaPos);      // Inicia animación de movimiento

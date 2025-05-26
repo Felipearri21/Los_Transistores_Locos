@@ -1,23 +1,52 @@
 #include "peon.h"
 #include "tablero.h"
-
-Peon::Peon(Vector2D pos, bool blanca)
+#include "vector2d.h"
+Peon::Peon(Vector2D pos, bool blanca,float tamCasilla)
     : Pieza(pos, blanca, TipoPieza::PEON) {
+
+    //Calculo de cual tamaño es necesario
+    if (tamCasilla >= 130)  // por ejemplo para modo NORMAL
+        if (esBlanca) {
+            spriteclaro={ "imagenes/peonclarosilverman.png",5 };
+            spriteclaro.setCenter(pos.x, pos.y);
+        }
+        else {
+            spriteoscuro = { "imagenes/peonoscurosilverman.png",5 };
+            spriteoscuro.setCenter(pos.x, pos.y);
+        }
+    else if (tamCasilla >= 100)  // por ejemplo ALAMOS
+        if (esBlanca) {
+            spriteclaro={ "imagenes/peonclaroalamos.png",5 };
+            spriteclaro.setCenter(pos.x, pos.y);
+        }
+        else {
+            spriteoscuro ={ "imagenes/peonoscuroalamos.png",5 };
+            spriteoscuro.setCenter(pos.x, pos.y);
+        }
+    else {
+        if (esBlanca) {
+            spriteclaro ={ "imagenes/peonclaro1.png",5 };
+            spriteclaro.setCenter(pos.x, pos.y);
+        }
+        else {
+            spriteoscuro ={ "imagenes/peonoscuro1.png",5 };
+            spriteoscuro.setCenter(pos.x, pos.y);
+        }
+    }
 }
 
-// Dibujo simple del peón, hay que reemplazarlo con una imagen de un peón
-void Peon::dibujar() const {
-    float radio = 20.0f;
-    glColor3f(esBlanca ? 1.0f : 0.0f, esBlanca ? 1.0f : 0.0f, esBlanca ? 1.0f : 0.0f); // blanco o negro
-
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < 20; ++i) {
-        float theta = 2.0f * 3.14159f * float(i) / float(20);
-        float dx = radio * cosf(theta);
-        float dy = radio * sinf(theta);
-        glVertex2f(posicion.x + dx, posicion.y + dy);
+void Peon::dibujar()  {
+    
+    // Actualiza la posición por si se ha movido
+    if (esBlanca) {
+        spriteclaro.setCenter(posicion.x,posicion.y);
+        spriteclaro.draw();
     }
-    glEnd();
+    else {
+        spriteoscuro.setPos(posicion.x, posicion.y);
+        spriteoscuro.draw();
+    }
+
 }
 
 // Movimiento vertical + captura diagonal

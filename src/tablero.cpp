@@ -40,7 +40,7 @@ Tablero::~Tablero() {
         delete p;
 }
 void Tablero::dibujarPiezas() const {
-    for (const Pieza* p : piezas) {
+    for ( Pieza* p : piezas) {
         if (p) p->dibujar();
     }
 }
@@ -60,8 +60,8 @@ void Tablero::inicializarPiezas() {
 
     for (int col = 0; col < C; ++col) {
         
-        piezas.push_back(new Peon(casillaAPosicion(col, 1), true));// Peones blancos (fila 1)
+        piezas.push_back(new Peon(casillaAPosicion(col, 1), true,tamCasilla));// Peones blancos (fila 1)
 
-        piezas.push_back(new Peon(casillaAPosicion(col, F - 2), false));// Peones negros (fila Final - 2)
+        piezas.push_back(new Peon(casillaAPosicion(col, F - 2), false,tamCasilla));// Peones negros (fila Final - 2)
     }
 }
