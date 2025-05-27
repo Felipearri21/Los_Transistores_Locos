@@ -17,10 +17,11 @@ private:
     std::vector<Pieza*> piezas;
     void inicializarPiezas();
     Vector2D casillaAPosicion(int col, int fila) const;
-
 public:
+    ETSIDI::Sprite casillaclara{ "imagenes/cuadrado.png",5 };
+    ETSIDI::Sprite casillaoscura{ "imagenes/cuadrado2.png",5 };
     Tablero(ModoJuego modoSeleccionado);
-    void dibujarTablero() const;
+    void dibujarTablero();
     void dibujarPiezas() const;
 
     int getFilas() const { return config.filas; }

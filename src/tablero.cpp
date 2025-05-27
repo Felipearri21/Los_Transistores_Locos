@@ -1,4 +1,11 @@
 #include "tablero.h"
+#include "peon.h"
+#include "vector2d.h"
+#include "reina.h"
+#include "rey.h"
+#include "torre.h"
+#include "caballo.h"
+#include "alfil.h"
 
 Tablero::Tablero(ModoJuego modoSeleccionado) : 
     modo(modoSeleccionado), config(ModoJuegoConfig::obtenerConfigModo(modoSeleccionado)) {
@@ -15,23 +22,26 @@ Tablero::Tablero(ModoJuego modoSeleccionado) :
     inicializarPiezas();
 }
 
-void Tablero::dibujarTablero() const {
+void Tablero::dibujarTablero() {
     for (int fila = 0; fila < config.filas; ++fila) {
         for (int col = 0; col < config.columnas; ++col) {
             float x = origenTablero.x + col * tamCasilla;
             float y = origenTablero.y + fila * tamCasilla;
 
-            if ((fila + col) % 2 == 0)
-                glColor3f(1.0f, 0.9f, 0.7f); // Casilla clara
-            else
-                glColor3f(0.5f, 0.3f, 0.1f); // Casilla oscura
+            // Posición centro de la casilla
+            float centerX = x + tamCasilla / 2;
+            float centerY = y + tamCasilla / 2;
 
-            glBegin(GL_QUADS);
-            glVertex2f(x, y);
-            glVertex2f(x + tamCasilla, y);
-            glVertex2f(x + tamCasilla, y + tamCasilla);
-            glVertex2f(x, y + tamCasilla);
-            glEnd();
+            if ((fila + col) % 2 == 0) {
+                casillaclara.setPos(centerX, centerY);
+                casillaclara.setSize(tamCasilla, tamCasilla);
+                casillaclara.draw();
+            }
+            else {
+                casillaoscura.setPos(centerX, centerY);
+                casillaoscura.setSize(tamCasilla, tamCasilla);
+                casillaoscura.draw();
+            }
         }
     }
 }
@@ -61,7 +71,28 @@ void Tablero::inicializarPiezas() {
     for (int col = 0; col < C; ++col) {
         
         piezas.push_back(new Peon(casillaAPosicion(col, 1), true,tamCasilla));// Peones blancos (fila 1)
-
         piezas.push_back(new Peon(casillaAPosicion(col, F - 2), false,tamCasilla));// Peones negros (fila Final - 2)
+    }
+    piezas.push_back(new reina(casillaAPosicion((C / 2) - 1, 0), true, tamCasilla));
+    piezas.push_back(new reina(casillaAPosicion((C / 2) - 1, F-1), false, tamCasilla));
+    piezas.push_back(new rey(casillaAPosicion((C / 2), 0), true, tamCasilla));
+    piezas.push_back(new rey(casillaAPosicion((C / 2), F - 1), false, tamCasilla));
+    piezas.push_back(new torre(casillaAPosicion(0, 0), true, tamCasilla));
+    piezas.push_back(new torre(casillaAPosicion(0, F - 1), false, tamCasilla));
+    piezas.push_back(new torre(casillaAPosicion(C-1, 0), true, tamCasilla));
+    piezas.push_back(new torre(casillaAPosicion(C-1, F - 1), false, tamCasilla));
+    if (config.permite(TipoPieza::CABALLO))
+    {
+        piezas.push_back(new caballo(casillaAPosicion(1, 0), true, tamCasilla));
+        piezas.push_back(new caballo(casillaAPosicion(1, F - 1), false, tamCasilla));
+        piezas.push_back(new caballo(casillaAPosicion(C - 2, 0), true, tamCasilla));
+        piezas.push_back(new caballo(casillaAPosicion(C - 2, F - 1), false, tamCasilla));
+    }
+    if (config.permite(TipoPieza::ALFIL))
+    {
+        piezas.push_back(new alfil(casillaAPosicion(2, 0), true, tamCasilla));
+        piezas.push_back(new alfil(casillaAPosicion(2, F - 1), false, tamCasilla));
+        piezas.push_back(new alfil(casillaAPosicion(C - 3, 0), true, tamCasilla));
+        piezas.push_back(new alfil(casillaAPosicion(C - 3, F - 1), false, tamCasilla));
     }
 }

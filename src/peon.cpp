@@ -1,6 +1,7 @@
 #include "peon.h"
 #include "tablero.h"
 #include "vector2d.h"
+
 Peon::Peon(Vector2D pos, bool blanca,float tamCasilla)
     : Pieza(pos, blanca, TipoPieza::PEON) {
 
@@ -8,29 +9,29 @@ Peon::Peon(Vector2D pos, bool blanca,float tamCasilla)
     if (tamCasilla >= 130)  // por ejemplo para modo NORMAL
         if (esBlanca) {
             spriteclaro={ "imagenes/peonclarosilverman.png",5 };
-            spriteclaro.setCenter(pos.x, pos.y);
+            spriteclaro.setPos(pos.x, pos.y);
         }
         else {
             spriteoscuro = { "imagenes/peonoscurosilverman.png",5 };
-            spriteoscuro.setCenter(pos.x, pos.y);
+            spriteoscuro.setPos(pos.x, pos.y);
         }
     else if (tamCasilla >= 100)  // por ejemplo ALAMOS
         if (esBlanca) {
             spriteclaro={ "imagenes/peonclaroalamos.png",5 };
-            spriteclaro.setCenter(pos.x, pos.y);
+            spriteclaro.setPos(pos.x, pos.y);
         }
         else {
             spriteoscuro ={ "imagenes/peonoscuroalamos.png",5 };
-            spriteoscuro.setCenter(pos.x, pos.y);
+            spriteoscuro.setPos(pos.x, pos.y);
         }
     else {
         if (esBlanca) {
             spriteclaro ={ "imagenes/peonclaro1.png",5 };
-            spriteclaro.setCenter(pos.x, pos.y);
+            spriteclaro.setPos(pos.x, pos.y);
         }
         else {
             spriteoscuro ={ "imagenes/peonoscuro1.png",5 };
-            spriteoscuro.setCenter(pos.x, pos.y);
+            spriteoscuro.setPos(pos.x, pos.y);
         }
     }
 }
@@ -39,7 +40,7 @@ void Peon::dibujar()  {
     
     // Actualiza la posición por si se ha movido
     if (esBlanca) {
-        spriteclaro.setCenter(posicion.x,posicion.y);
+        spriteclaro.setPos(posicion.x,posicion.y);
         spriteclaro.draw();
     }
     else {

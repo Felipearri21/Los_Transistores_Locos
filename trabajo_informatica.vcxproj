@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\alfil.h" />
     <ClInclude Include="src\Boton.h" />
     <ClInclude Include="src\caballo.h" />
     <ClInclude Include="src\Color.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="src\vector2d.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\alfil.cpp" />
     <ClCompile Include="src\Boton.cpp" />
     <ClCompile Include="src\caballo.cpp" />
     <ClCompile Include="src\Color.cpp" />
