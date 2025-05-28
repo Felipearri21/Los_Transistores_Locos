@@ -1,4 +1,5 @@
 #include "alfil.h"
+#include "tablero.h"
 
 alfil::alfil(Vector2D pos, bool blanca, float tamCasilla)
     : Pieza(pos, blanca, TipoPieza::PEON) {
@@ -51,7 +52,31 @@ void alfil::dibujar() {
 std::vector<Vector2D> alfil::calcularMovimientosValidos(const Tablero& tablero) const {
     std::vector<Vector2D> movimientos;
 
-    // TODO: Implementar la lógica real para la reina
+    int col = static_cast<int>((posicion.x - tablero.getOrigen().x) / tablero.getTamCasilla());
+    int fila = static_cast<int>((posicion.y - tablero.getOrigen().y) / tablero.getTamCasilla());
+
+    // Direcciones diagonales: {fila, col}
+    int dir[4][2] = { {-1, -1}, {-1, 1}, {1, 1}, {1, -1} };
+
+    for (int d = 0; d < 4; ++d) {
+        int df = dir[d][0];
+        int dc = dir[d][1];
+        int f = fila + df;
+        int c = col + dc;
+
+        while (f >= 0 && f < tablero.getFilas() && c >= 0 && c < tablero.getColumnas()) {
+            if (tablero.estaLibre(c, f)) {
+                movimientos.push_back(tablero.casillaAPosicion(c, f));
+            }
+            else {
+                if (tablero.hayPiezaContraria(c, f, esBlanca))
+                    movimientos.push_back(tablero.casillaAPosicion(c, f));
+                break; // No puede saltar piezas
+            }
+            f += df;
+            c += dc;
+        }
+    }
 
     return movimientos;
 }

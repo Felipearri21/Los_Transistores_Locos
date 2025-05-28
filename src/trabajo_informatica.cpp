@@ -160,7 +160,14 @@ void OnMouse(int button, int state, int x, int y)
         int x_virtual = static_cast<int>(x * escalaX);
         int y_virtual = static_cast<int>((realHeight - y) * escalaY);
 
+        // 1. Click en el menú
         Menu_1.mouse_Menu(x_virtual, y_virtual);
+
+        // 2. Click en el tablero (si estamos en modo de juego)
+        Estado_Menu estado = Menu_1.get_Estado_Menu();
+        if ((estado == Estado_Menu::AJEDREZ || estado == Estado_Menu::ALAMOS || estado == Estado_Menu::SILVERMAN) && tablero) {
+            tablero->manejarClick(x_virtual, y_virtual);
+        }
 
         glutPostRedisplay();
     }

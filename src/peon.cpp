@@ -50,33 +50,32 @@ void Peon::dibujar()  {
 
 }
 
-// Movimiento vertical + captura diagonal
 std::vector<Vector2D> Peon::calcularMovimientosValidos(const Tablero& tablero) const {
     std::vector<Vector2D> movimientos;
-
     int direccion = esBlanca ? 1 : -1;
 
-    int filaActual = static_cast<int>(posicion.y);
-    int colActual = static_cast<int>(posicion.x);
+    Vector2D actual = getPosicion();
 
-    int filaAvance = filaActual + direccion;
+    // Convertir posición actual a coordenadas de casilla
+    int col = static_cast<int>((actual.x - tablero.getOrigen().x) / tablero.getTamCasilla());
+    int fila = static_cast<int>((actual.y - tablero.getOrigen().y) / tablero.getTamCasilla());
 
-    if (tablero.getFilas() > filaAvance && filaAvance >= 0) {
-        // Movimiento recto 1 casilla
-        movimientos.push_back(Vector2D(colActual, filaAvance));
+    // 1. Avance simple (una casilla hacia adelante)
+    int nuevaFila = fila + direccion;
+    if (tablero.estaLibre(col, nuevaFila)) {
+        movimientos.push_back(tablero.casillaAPosicion(col, nuevaFila));
 
-        // Movimiento inicial doble si está en fila base (opcional según modo)
-        if ((esBlanca && filaActual == 1) || (!esBlanca && filaActual == tablero.getFilas() - 2)) {
-            movimientos.push_back(Vector2D(colActual, filaAvance + direccion));
-        }
+        // 2. Avance doble (solo si está en su fila inicial)
+        bool filaInicial = (esBlanca && fila == 1) || (!esBlanca && fila == tablero.getFilas() - 2);
+        if (filaInicial && tablero.estaLibre(col, fila + 2 * direccion))
+            movimientos.push_back(tablero.casillaAPosicion(col, fila + 2 * direccion));
+    }
 
-        // Captura en diagonal (izquierda y derecha)
-        for (int dx : {-1, 1}) {
-            int nuevaCol = colActual + dx;
-            if (nuevaCol >= 0 && nuevaCol < tablero.getColumnas()) {
-                movimientos.push_back(Vector2D(nuevaCol, filaAvance));
-            }
-        }
+    // 3. Capturas diagonales
+    for (int dcol : {-1, 1}) {
+        int nuevaCol = col + dcol;
+        if (tablero.hayPiezaContraria(nuevaCol, nuevaFila, esBlanca))
+            movimientos.push_back(tablero.casillaAPosicion(nuevaCol, nuevaFila));
     }
 
     return movimientos;

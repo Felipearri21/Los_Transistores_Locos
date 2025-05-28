@@ -1,5 +1,5 @@
 #include "caballo.h"
-
+#include "tablero.h"
 
 caballo::caballo(Vector2D pos, bool blanca, float tamCasilla)
     : Pieza(pos, blanca, TipoPieza::PEON) {
@@ -51,8 +51,26 @@ void caballo::dibujar() {
 
 std::vector<Vector2D> caballo::calcularMovimientosValidos(const Tablero& tablero) const {
     std::vector<Vector2D> movimientos;
+    static const int dfilas[] = { -2, -1, 1, 2, 2, 1, -1, -2 };
+    static const int dcols[] = { 1,  2, 2, 1, -1, -2, -2, -1 };
 
-    // TODO: Implementar la lógica real para la reina
+    int col = static_cast<int>((posicion.x - tablero.getOrigen().x) / tablero.getTamCasilla());
+    int fila = static_cast<int>((posicion.y - tablero.getOrigen().y) / tablero.getTamCasilla());
+
+    for (int i = 0; i < 8; ++i) {
+        int nuevaCol = col + dcols[i];
+        int nuevaFila = fila + dfilas[i];
+
+        // Asegúrate de que esté dentro del tablero
+        if (nuevaCol >= 0 && nuevaCol < tablero.getColumnas() &&
+            nuevaFila >= 0 && nuevaFila < tablero.getFilas()) {
+
+            if (tablero.estaLibre(nuevaCol, nuevaFila) ||
+                tablero.hayPiezaContraria(nuevaCol, nuevaFila, esBlanca)) {
+                movimientos.push_back(tablero.casillaAPosicion(nuevaCol, nuevaFila));
+            }
+        }
+    }
 
     return movimientos;
 }

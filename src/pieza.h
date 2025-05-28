@@ -23,10 +23,9 @@ public:
 
     virtual void dibujar()  = 0;
     virtual std::vector<Vector2D> calcularMovimientosValidos(const Tablero& tablero) const = 0;
-
-    void moverA(Vector2D nuevaPos);      // Inicia animación de movimiento
-    void actualizar(double t);           // Avanza movimiento (si está en animación)
-
+    bool esPiezaBlanca() const { return esBlanca; }
+    
+    void setPosicion(Vector2D nuevaPos) { posicion = nuevaPos; }
     Vector2D getPosicion() const { return posicion; }
     bool esAliada(bool blancas) const { return esBlanca == blancas; }
     TipoPieza getTipo() const { return tipo; }

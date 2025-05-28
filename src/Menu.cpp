@@ -31,7 +31,7 @@ void Menu::set_Menu()
     {
         Boton(11, "Ajedrez Normal", Color(228,204,72), 195, 100, 250, 50),
         Boton(12, "Los Alamos", Color(228,204,72), 515, 100, 250, 50),
-        Boton(13, "Silverman 4x4", Color(228,204,72), 835, 100, 250, 50),
+        Boton(13, "Silverman", Color(228,204,72), 835, 100, 250, 50),
         Boton(14, "Ajustes", Color(228,204,72), 1155, 100, 250, 50),
         Boton(16, "Ninguna", Color(228,204,72), 1445, 160, 310, 50),
         Boton(15, "<-", Color(228,204,72), 1445, 100, 150, 50),

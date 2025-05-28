@@ -1,4 +1,5 @@
 #include "torre.h"
+#include "tablero.h"
 
 torre::torre(Vector2D pos, bool blanca, float tamCasilla)
     : Pieza(pos, blanca, TipoPieza::PEON) {
@@ -51,7 +52,36 @@ void torre::dibujar() {
 std::vector<Vector2D> torre::calcularMovimientosValidos(const Tablero& tablero) const {
     std::vector<Vector2D> movimientos;
 
-    // TODO: Implementar la lógica real para la reina
+    int col = static_cast<int>((posicion.x - tablero.getOrigen().x) / tablero.getTamCasilla());
+    int fila = static_cast<int>((posicion.y - tablero.getOrigen().y) / tablero.getTamCasilla());
+
+    // Direcciones en línea recta: arriba, abajo, izquierda, derecha
+    int dir[4][2] = {
+        {-1, 0}, // arriba
+        {1, 0},  // abajo
+        {0, -1}, // izquierda
+        {0, 1}   // derecha
+    };
+
+    for (int d = 0; d < 4; ++d) {
+        int f = fila + dir[d][0];
+        int c = col + dir[d][1];
+
+        while (f >= 0 && f < tablero.getFilas() && c >= 0 && c < tablero.getColumnas()) {
+            if (tablero.estaLibre(c, f)) {
+                movimientos.push_back(tablero.casillaAPosicion(c, f));
+            }
+            else {
+                if (tablero.hayPiezaContraria(c, f, esBlanca)) {
+                    movimientos.push_back(tablero.casillaAPosicion(c, f));
+                }
+                // Encontró una pieza, no puede seguir en esa dirección
+                break;
+            }
+            f += dir[d][0];
+            c += dir[d][1];
+        }
+    }
 
     return movimientos;
 }

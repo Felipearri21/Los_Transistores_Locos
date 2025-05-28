@@ -1,10 +1,10 @@
-#include "rey.h"
-
+﻿#include "rey.h"
+#include "tablero.h"
 
 rey::rey(Vector2D pos, bool blanca, float tamCasilla)
     : Pieza(pos, blanca, TipoPieza::PEON) {
 
-    //Calculo de cual tama�o es necesario
+    //Calculo de cual tamaño es necesario
     if (tamCasilla >= 130)  // por ejemplo para modo NORMAL
         if (esBlanca) {
             spriteclaro = { "imagenes/reyclarosilverman.png",5 };
@@ -37,7 +37,7 @@ rey::rey(Vector2D pos, bool blanca, float tamCasilla)
 
 void rey::dibujar() {
 
-    // Actualiza la posici�n por si se ha movido
+    // Actualiza la posición por si se ha movido
     if (esBlanca) {
         spriteclaro.setPos(posicion.x, posicion.y);
         spriteclaro.draw();
@@ -52,7 +52,26 @@ void rey::dibujar() {
 std::vector<Vector2D> rey::calcularMovimientosValidos(const Tablero& tablero) const {
     std::vector<Vector2D> movimientos;
 
-    // TODO: Implementar la l�gica real para la reina
+    int col = static_cast<int>((posicion.x - tablero.getOrigen().x) / tablero.getTamCasilla());
+    int fila = static_cast<int>((posicion.y - tablero.getOrigen().y) / tablero.getTamCasilla());
+
+    // 8 direcciones alrededor del rey (una casilla en cualquier dirección)
+    int dir[8][2] = {
+        {-1, 0}, {1, 0},   // vertical ↑ ↓
+        {0, -1}, {0, 1},   // horizontal ← →
+        {-1, -1}, {-1, 1}, {1, 1}, {1, -1}  // diagonales
+    };
+
+    for (int d = 0; d < 8; ++d) {
+        int f = fila + dir[d][0];
+        int c = col + dir[d][1];
+
+        if (f >= 0 && f < tablero.getFilas() && c >= 0 && c < tablero.getColumnas()) {
+            if (tablero.estaLibre(c, f) || tablero.hayPiezaContraria(c, f, esBlanca)) {
+                movimientos.push_back(tablero.casillaAPosicion(c, f));
+            }
+        }
+    }
 
     return movimientos;
 }
