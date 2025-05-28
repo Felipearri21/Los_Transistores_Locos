@@ -139,6 +139,43 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
             }
             // Mover la pieza y cambiar el turno
             piezaSeleccionada->setPosicion(destino);
+            Peon* peonMovido = dynamic_cast<Peon*>(piezaSeleccionada);
+            if (peonMovido) {
+                int filaDestino = static_cast<int>((destino.y - origenTablero.y) / tamCasilla);
+
+                bool promociona = (peonMovido->esPiezaBlanca() && filaDestino == getFilas() - 1) ||
+                    (!peonMovido->esPiezaBlanca() && filaDestino == 0);
+
+                if (promociona) {
+                    if (modo == ModoJuego::SILVERMAN) {
+                        // Guardamos posición y bando y esperamos tecla R "Reina", T "Torre"
+                        esperandoPromocion = true;
+                        posPromocion = destino;
+                        colorPromocion = peonMovido->esPiezaBlanca();
+                        auto it = std::find(piezas.begin(), piezas.end(), piezaSeleccionada);
+                        if (it != piezas.end()) {
+                            delete* it;
+                            piezas.erase(it);
+                        }
+                        piezaSeleccionada = nullptr;
+                        return;
+                    }
+                    else {
+                        // Promoción directa a reina en modos distintos a silverman
+                        Vector2D pos = peonMovido->getPosicion();
+                        bool esBlanca = peonMovido->esPiezaBlanca();
+                        auto it = std::find(piezas.begin(), piezas.end(), piezaSeleccionada);
+                        if (it != piezas.end()) {
+                            delete* it;
+                            piezas.erase(it);
+                        }
+                        piezas.push_back(new reina(pos, esBlanca, tamCasilla));
+                        piezaSeleccionada = nullptr;
+                        turnoBlancas = !turnoBlancas;
+                        return;
+                    }
+                }
+            }
             piezaSeleccionada = nullptr;
             turnoBlancas = !turnoBlancas;  // CAMBIO DE TURNO
         }
@@ -148,6 +185,20 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
             casillaSeleccionada = destino;
         }
     }
+}
+
+void Tablero::promocionarPeon(char opcion) {
+    if (!esperandoPromocion) return;
+
+    if (opcion == 'r' || opcion == 'R') {
+        piezas.push_back(new reina(posPromocion, colorPromocion, tamCasilla));
+    }
+    else if (opcion == 't' || opcion == 'T') {
+        piezas.push_back(new torre(posPromocion, colorPromocion, tamCasilla));
+    }
+
+    esperandoPromocion = false;
+    turnoBlancas = !turnoBlancas;
 }
 
 bool Tablero::estaLibre(int col, int fila) const {

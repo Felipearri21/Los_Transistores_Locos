@@ -145,6 +145,16 @@ void OnReshape(int width, int height)
 
 void OnKeyboard(unsigned char key, int x, int y)
 {
+    if (tablero && tablero->esperandoPromocion) {
+        if (key == 'r' || key == 'R') {
+            tablero->promocionarPeon('r');
+        }
+        else if (key == 't' || key == 'T') {
+            tablero->promocionarPeon('t');
+        }
+        glutPostRedisplay();
+        return;
+    }
     Menu_1.keyboard_Menu(key);
     glutPostRedisplay();
 }

@@ -13,6 +13,9 @@ private:
     ModoJuegoConfig config;
     float tamCasilla;
     Vector2D origenTablero;
+    bool esperandoPromocion = false;
+    Vector2D posPromocion;
+    bool colorPromocion;
 
     std::vector<Pieza*> piezas;
     void inicializarPiezas();
@@ -28,6 +31,7 @@ public:
     void dibujarTablero();
     void dibujarPiezas() const;
     void manejarClick(float mouseX, float mouseY);
+    void promocionarPeon(char opcion);
     int getFilas() const { return config.filas; }
     int getColumnas() const { return config.columnas; }
     bool puedeComerseAliados() const { return config.puedeComerseAliados; }
@@ -36,5 +40,6 @@ public:
     float getTamCasilla() const { return tamCasilla; }
     bool estaLibre(int col, int fila) const;
     bool hayPiezaContraria(int col, int fila, bool blanca) const;
+    friend void OnKeyboard(unsigned char key, int x, int y);
     ~Tablero();
 };
