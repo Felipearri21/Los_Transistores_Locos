@@ -11,5 +11,6 @@ public:
 
     void dibujar()  override;
     std::vector<Vector2D> calcularMovimientosValidos(const Tablero& tablero) const override;
+    Pieza* clonar() const override;
 
 };

@@ -81,3 +81,6 @@ std::vector<Vector2D> Peon::calcularMovimientosValidos(const Tablero& tablero) c
 
     return movimientos;
 }
+Pieza* Peon::clonar() const { 
+    return new Peon(*this); 
+}

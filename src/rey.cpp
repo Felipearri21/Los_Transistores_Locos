@@ -75,3 +75,6 @@ std::vector<Vector2D> rey::calcularMovimientosValidos(const Tablero& tablero) co
 
     return movimientos;
 }
+Pieza* rey::clonar() const { 
+    return new rey(*this); 
+}

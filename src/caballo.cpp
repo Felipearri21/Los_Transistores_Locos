@@ -73,3 +73,6 @@ std::vector<Vector2D> caballo::calcularMovimientosValidos(const Tablero& tablero
 
     return movimientos;
 }
+Pieza* caballo::clonar() const { 
+    return new caballo(*this); 
+}

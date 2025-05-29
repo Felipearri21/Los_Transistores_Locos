@@ -1,4 +1,6 @@
-﻿#include "tablero.h"
+﻿#include <iostream>
+#include "Variables_Globales.h"
+#include "tablero.h"
 #include "peon.h"
 #include "vector2d.h"
 #include "reina.h"
@@ -22,7 +24,12 @@ Tablero::Tablero(ModoJuego modoSeleccionado) :
     inicializarPiezas();
 }
 
+
 void Tablero::dibujarTablero() {
+    if (gameOver) {
+        //INSERTAR IMAGEN DE JAQUE MATE
+        return;
+    }
     for (int fila = 0; fila < config.filas; ++fila) {
         for (int col = 0; col < config.columnas; ++col) {
             float x = origenTablero.x + col * tamCasilla;
@@ -50,6 +57,7 @@ Tablero::~Tablero() {
         delete p;
 }
 void Tablero::dibujarPiezas() const {
+    if (gameOver) return;
     for ( Pieza* p : piezas) {
         if (p) p->dibujar();
     }
@@ -97,13 +105,15 @@ void Tablero::inicializarPiezas() {
     }
 }
 void Tablero::manejarClick(float mouseX, float mouseY) {
+    if (gameOver) return;
     int col = static_cast<int>((mouseX - origenTablero.x) / tamCasilla);
     int fila = static_cast<int>((mouseY - origenTablero.y) / tamCasilla);
-
+    
     if (col < 0 || col >= config.columnas || fila < 0 || fila >= config.filas)
         return;
 
     Vector2D destino = casillaAPosicion(col, fila);
+
     // Buscar si hay una pieza en la casilla clicada
     Pieza* piezaEnClick = nullptr;
     for (Pieza* p : piezas) {
@@ -121,6 +131,27 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
     }
     else {
         auto movimientos = piezaSeleccionada->calcularMovimientosValidos(*this);
+
+        std::vector<Vector2D> movimientosLegales;
+        for (auto mov : movimientos) {
+            Tablero copia = this->clonar();
+            for (Pieza* p : copia.piezas) {
+                if (p &&
+                    p->getPosicion() == piezaSeleccionada->getPosicion() &&
+                    p->getTipo() == piezaSeleccionada->getTipo() &&
+                    p->esPiezaBlanca() == piezaSeleccionada->esPiezaBlanca()) {
+
+                    copia.piezaSeleccionada = p;
+                    break;
+                }
+            }
+            copia.simularMovimiento(copia.piezaSeleccionada, mov);
+
+            if (!copia.Jaque(piezaSeleccionada->esPiezaBlanca()))
+                movimientosLegales.push_back(mov);
+        }
+        movimientos = movimientosLegales;
+
         bool esMovimientoValido = false;
         for (const auto& mov : movimientos) {
             if ((mov - destino).modulo() < tamCasilla / 2) {
@@ -179,8 +210,15 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
                     }
                 }
             }
+            bool colorTurnoAnterior = piezaEnClick ? piezaEnClick->esPiezaBlanca() : !turnoBlancas;
             piezaSeleccionada = nullptr;
-            turnoBlancas = !turnoBlancas;  // CAMBIO DE TURNO
+            turnoBlancas = !turnoBlancas;
+
+            if (JaqueMate(!colorTurnoAnterior)) {
+                std::cout << "¡Jaque mate! Ganan las " << (colorTurnoAnterior ? "blancas" : "negras") << "." << std::endl;
+                gameOver = true;
+                return;
+            }
         }
         else if (piezaEnClick && piezaEnClick->esPiezaBlanca() == turnoBlancas) {
             // Cambiar selección si haces clic en otra pieza propia
@@ -238,4 +276,88 @@ bool Tablero::puedeMoverA(int col, int fila, bool esBlanca) const {
     }
 
     return false;
+}
+bool Tablero::Jaque(bool esBlancas) {
+    // Posición rey
+    Vector2D posRey;
+    for (Pieza* pieza : piezas) {
+        if (!pieza) {
+            std::cout << "[AVISO] Se encontró un puntero nulo en el vector de piezas." << std::endl;
+            continue;
+        }
+
+        // Confirmamos que apunta a un objeto válido, ya que con la copia se está complicando
+        if (dynamic_cast<Pieza*>(pieza) == nullptr) {
+            std::cout << "[ERROR] Puntero no apunta a un objeto válido de tipo Pieza." << std::endl;
+            continue;
+        }
+
+        if (pieza->esPiezaBlanca() != esBlancas) {
+            try {
+                auto movs = pieza->calcularMovimientosValidos(*this);
+
+                for (const auto& m : movs) {
+                    if ((m - posRey).modulo() < tamCasilla / 2) {
+                        return true; // JAQUE
+                    }
+                }
+
+            }
+            catch (...) {
+                std::cout << "[EXCEPCIÓN] Se produjo un error al calcular movimientos válidos de una pieza." << std::endl;
+            }
+        }
+    }
+
+    return false;
+}
+void Tablero::simularMovimiento(Pieza* pieza, Vector2D destino) {
+    // Mover la pieza
+    pieza->setPosicion(destino);
+}
+
+bool Tablero::JaqueMate(bool esBlancas) {
+    if (!Jaque(esBlancas))
+        return false;
+
+    for (Pieza* pieza : piezas) {
+        if (pieza && pieza->esPiezaBlanca() == esBlancas) {
+            auto posiblesMovs = pieza->calcularMovimientosValidos(*this);
+
+            for (auto mov : posiblesMovs) {
+                Tablero copia = this->clonar();
+
+                // Buscar la copia equivalente de la pieza en el tablero clonado
+                for (Pieza* p : copia.piezas) {
+                    if (p &&
+                        p->getPosicion() == pieza->getPosicion() &&
+                        p->getTipo() == pieza->getTipo() &&
+                        p->esPiezaBlanca() == pieza->esPiezaBlanca()) {
+
+                        copia.piezaSeleccionada = p;
+                        break;
+                    }
+                }
+
+                // Usar la pieza clonada para simular el movimiento
+                copia.simularMovimiento(copia.piezaSeleccionada, mov);
+
+                if (!copia.Jaque(esBlancas)) {
+                    return false; // Puede salvarse
+                }
+            }
+        }
+    }
+
+    return true; // Jaque mate 100%
+}
+
+Tablero Tablero::clonar() const {
+    Tablero copia = *this;
+    copia.piezas.clear();
+    for (Pieza* p : piezas) {
+        if (p)
+            copia.piezas.push_back(p->clonar());
+    }
+    return copia;
 }

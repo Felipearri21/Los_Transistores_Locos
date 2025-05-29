@@ -82,3 +82,6 @@ std::vector<Vector2D> torre::calcularMovimientosValidos(const Tablero& tablero) 
 
     return movimientos;
 }
+Pieza* torre::clonar() const { 
+    return new torre(*this); 
+}

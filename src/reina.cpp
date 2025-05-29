@@ -83,3 +83,6 @@ std::vector<Vector2D> reina::calcularMovimientosValidos(const Tablero& tablero) 
 
     return movimientos;
 }
+Pieza* reina::clonar() const {
+    return new reina(*this); 
+}

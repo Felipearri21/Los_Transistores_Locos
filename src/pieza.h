@@ -23,6 +23,7 @@ public:
 
     virtual void dibujar()  = 0;
     virtual std::vector<Vector2D> calcularMovimientosValidos(const Tablero& tablero) const = 0;
+    virtual Pieza* clonar() const = 0;
     bool esPiezaBlanca() const { return esBlanca; }
     
     void setPosicion(Vector2D nuevaPos) { posicion = nuevaPos; }

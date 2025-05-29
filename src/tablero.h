@@ -14,6 +14,7 @@ private:
     float tamCasilla;
     Vector2D origenTablero;
     bool esperandoPromocion = false;
+    bool gameOver = false;
     Vector2D posPromocion;
     bool colorPromocion;
 
@@ -29,6 +30,7 @@ public:
     ETSIDI::Sprite casillaclara{ "imagenes/cuadrado.png",5 };
     ETSIDI::Sprite casillaoscura{ "imagenes/cuadrado2.png",5 };
     Tablero(ModoJuego modoSeleccionado);
+    Tablero clonar() const;
     void dibujarTablero();
     void dibujarPiezas() const;
     void manejarClick(float mouseX, float mouseY);
@@ -43,5 +45,8 @@ public:
     bool hayPiezaContraria(int col, int fila, bool blanca) const;
     bool puedeMoverA(int col, int fila, bool esBlanca) const;
     friend void OnKeyboard(unsigned char key, int x, int y);
+    bool Jaque(bool esBlancas);
+    void simularMovimiento(Pieza* pieza, Vector2D destino);
+    bool JaqueMate(bool esBlancas);
     ~Tablero();
 };

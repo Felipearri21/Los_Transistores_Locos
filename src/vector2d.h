@@ -55,3 +55,6 @@ inline Vector2D Vector2D::operator /(double escalar) const
 {
 	return { x / escalar, y / escalar };
 }
+inline bool operator==(const Vector2D& a, const Vector2D& b) {
+	return std::abs(a.x - b.x) < 0.01 && std::abs(a.y - b.y) < 0.01;
+}

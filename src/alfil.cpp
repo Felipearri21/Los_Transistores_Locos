@@ -79,3 +79,6 @@ std::vector<Vector2D> alfil::calcularMovimientosValidos(const Tablero& tablero) 
 
     return movimientos;
 }
+Pieza* alfil::clonar() const {
+    return new alfil(*this);
+}
