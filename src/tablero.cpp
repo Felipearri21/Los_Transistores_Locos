@@ -173,6 +173,8 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
             }
             // Mover la pieza y cambiar el turno
             piezaSeleccionada->setPosicion(destino);
+            ETSIDI::play("sonidos/claves.mp3");
+                 
             Peon* peonMovido = dynamic_cast<Peon*>(piezaSeleccionada);
             if (peonMovido) {
                 int filaDestino = static_cast<int>((destino.y - origenTablero.y) / tamCasilla);
@@ -205,6 +207,7 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
                         }
                         piezas.push_back(new reina(pos, esBlanca, tamCasilla));
                         piezaSeleccionada = nullptr;
+                        ETSIDI::play("sonidos/panda.mp3");
                         turnoBlancas = !turnoBlancas;
                         return;
                     }
@@ -213,7 +216,9 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
             bool colorTurnoAnterior = piezaEnClick ? piezaEnClick->esPiezaBlanca() : !turnoBlancas;
             piezaSeleccionada = nullptr;
             turnoBlancas = !turnoBlancas;
-
+            if (Jaque(turnoBlancas)) {
+                std::cout << "¡Jaque a las " << (turnoBlancas ? "blancas" : "negras") << "!" << std::endl;
+            }
             if (JaqueMate(!colorTurnoAnterior)) {
                 std::cout << "¡Jaque mate! Ganan las " << (colorTurnoAnterior ? "blancas" : "negras") << "." << std::endl;
                 gameOver = true;
@@ -233,9 +238,11 @@ void Tablero::promocionarPeon(char opcion) {
 
     if (opcion == 'r' || opcion == 'R') {
         piezas.push_back(new reina(posPromocion, colorPromocion, tamCasilla));
+        ETSIDI::play("sonidos/panda.mp3");
     }
     else if (opcion == 't' || opcion == 'T') {
         piezas.push_back(new torre(posPromocion, colorPromocion, tamCasilla));
+        ETSIDI::play("sonidos/panda.mp3");
     }
 
     esperandoPromocion = false;
@@ -278,38 +285,37 @@ bool Tablero::puedeMoverA(int col, int fila, bool esBlanca) const {
     return false;
 }
 bool Tablero::Jaque(bool esBlancas) {
-    // Posición rey
     Vector2D posRey;
+
+    // 1. Buscar la posición del rey del color que se quiere comprobar
     for (Pieza* pieza : piezas) {
-        if (!pieza) {
-            std::cout << "[AVISO] Se encontró un puntero nulo en el vector de piezas." << std::endl;
-            continue;
+        if (pieza && pieza->getTipo() == TipoPieza::REY && pieza->esPiezaBlanca() == esBlancas) {
+            posRey = pieza->getPosicion();
+            break;
         }
+    }
+    // Si no se encuentra el rey (error lógico)
+    if (posRey.x == 0 && posRey.y == 0) {
+        std::cout << "[ERROR] Rey no encontrado para el color: " << (esBlancas ? "blanco" : "negro") << std::endl;
+        return false;
+    }
 
-        // Confirmamos que apunta a un objeto válido, ya que con la copia se está complicando
-        if (dynamic_cast<Pieza*>(pieza) == nullptr) {
-            std::cout << "[ERROR] Puntero no apunta a un objeto válido de tipo Pieza." << std::endl;
-            continue;
-        }
+    // 2. Comprobar si alguna pieza enemiga puede atacar al rey
+    for (Pieza* pieza : piezas) {
+        if (!pieza || pieza->esPiezaBlanca() == esBlancas)
+            continue; // Saltar piezas propias
 
-        if (pieza->esPiezaBlanca() != esBlancas) {
-            try {
-                auto movs = pieza->calcularMovimientosValidos(*this);
+        auto movs = pieza->calcularMovimientosValidos(*this);
 
-                for (const auto& m : movs) {
-                    if ((m - posRey).modulo() < tamCasilla / 2) {
-                        return true; // JAQUE
-                    }
-                }
-
-            }
-            catch (...) {
-                std::cout << "[EXCEPCIÓN] Se produjo un error al calcular movimientos válidos de una pieza." << std::endl;
+        for (const auto& m : movs) {
+            if ((m - posRey).modulo() < tamCasilla / 2)
+            {
+                return true; // JAQUE
             }
         }
     }
 
-    return false;
+    return false; // No está en jaque
 }
 void Tablero::simularMovimiento(Pieza* pieza, Vector2D destino) {
     // Mover la pieza
