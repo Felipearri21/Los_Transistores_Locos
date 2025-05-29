@@ -65,8 +65,7 @@ std::vector<Vector2D> caballo::calcularMovimientosValidos(const Tablero& tablero
         if (nuevaCol >= 0 && nuevaCol < tablero.getColumnas() &&
             nuevaFila >= 0 && nuevaFila < tablero.getFilas()) {
 
-            if (tablero.estaLibre(nuevaCol, nuevaFila) ||
-                tablero.hayPiezaContraria(nuevaCol, nuevaFila, esBlanca)) {
+            if (tablero.puedeMoverA(nuevaCol, nuevaFila, esBlanca)) {
                 movimientos.push_back(tablero.casillaAPosicion(nuevaCol, nuevaFila));
             }
         }

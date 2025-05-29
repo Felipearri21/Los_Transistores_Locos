@@ -129,8 +129,11 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
             }
         }
         if (esMovimientoValido) {
-            // Captura si es enemigo
-            if (piezaEnClick && piezaEnClick->esPiezaBlanca() != piezaSeleccionada->esPiezaBlanca()) {
+            // Comerse pieza alida si está permitido o comer piezas contrarias si no
+            if (piezaEnClick &&
+                (piezaEnClick->esPiezaBlanca() != piezaSeleccionada->esPiezaBlanca() ||
+                    puedeComerseAliados())) {
+
                 auto it = std::find(piezas.begin(), piezas.end(), piezaEnClick);
                 if (it != piezas.end()) {
                     delete* it;
@@ -214,5 +217,25 @@ bool Tablero::hayPiezaContraria(int col, int fila, bool blanca) const {
     for (auto* p : piezas)
         if (p && (p->getPosicion() - centro).modulo() < tamCasilla / 2 && p->esPiezaBlanca() != blanca)
             return true;
+    return false;
+}
+
+void Tablero::toggleCapturaAliados() {
+    config.puedeComerseAliados = !config.puedeComerseAliados;
+}
+
+bool Tablero::puedeMoverA(int col, int fila, bool esBlanca) const {
+    if (estaLibre(col, fila)) return true;
+
+    if (hayPiezaContraria(col, fila, esBlanca)) return true;
+
+    // Si hay una pieza aliada y está activado el modo de captura de aliados
+    if (puedeComerseAliados()) {
+        Vector2D centro = casillaAPosicion(col, fila);
+        for (auto* p : piezas)
+            if (p && (p->getPosicion() - centro).modulo() < tamCasilla / 2 && p->esPiezaBlanca() == esBlanca)
+                return true;
+    }
+
     return false;
 }

@@ -74,8 +74,9 @@ std::vector<Vector2D> Peon::calcularMovimientosValidos(const Tablero& tablero) c
     // 3. Capturas diagonales
     for (int dcol : {-1, 1}) {
         int nuevaCol = col + dcol;
-        if (tablero.hayPiezaContraria(nuevaCol, nuevaFila, esBlanca))
+        if (tablero.puedeMoverA(nuevaCol, nuevaFila, esBlanca) && !tablero.estaLibre(nuevaCol, nuevaFila)) {
             movimientos.push_back(tablero.casillaAPosicion(nuevaCol, nuevaFila));
+        }
     }
 
     return movimientos;

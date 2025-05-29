@@ -67,7 +67,7 @@ std::vector<Vector2D> rey::calcularMovimientosValidos(const Tablero& tablero) co
         int c = col + dir[d][1];
 
         if (f >= 0 && f < tablero.getFilas() && c >= 0 && c < tablero.getColumnas()) {
-            if (tablero.estaLibre(c, f) || tablero.hayPiezaContraria(c, f, esBlanca)) {
+            if (tablero.puedeMoverA(c, f, esBlanca)) {
                 movimientos.push_back(tablero.casillaAPosicion(c, f));
             }
         }

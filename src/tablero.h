@@ -20,7 +20,8 @@ private:
     std::vector<Pieza*> piezas;
     void inicializarPiezas();
     bool turnoBlancas = true;
-
+    void toggleCapturaAliados();
+    
 public:
     Vector2D casillaAPosicion(int col, int fila) const;
     Pieza* piezaSeleccionada = nullptr;
@@ -40,6 +41,7 @@ public:
     float getTamCasilla() const { return tamCasilla; }
     bool estaLibre(int col, int fila) const;
     bool hayPiezaContraria(int col, int fila, bool blanca) const;
+    bool puedeMoverA(int col, int fila, bool esBlanca) const;
     friend void OnKeyboard(unsigned char key, int x, int y);
     ~Tablero();
 };

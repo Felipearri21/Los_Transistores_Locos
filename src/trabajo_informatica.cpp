@@ -145,6 +145,12 @@ void OnReshape(int width, int height)
 
 void OnKeyboard(unsigned char key, int x, int y)
 {
+    if (key == 'c') {
+        if (tablero) {
+            tablero->toggleCapturaAliados(); 
+            std::cout << "Captura de aliados " << (tablero->puedeComerseAliados() ? "activada" : "desactivada") << std::endl;
+        }
+    }
     if (tablero && tablero->esperandoPromocion) {
         if (key == 'r' || key == 'R') {
             tablero->promocionarPeon('r');

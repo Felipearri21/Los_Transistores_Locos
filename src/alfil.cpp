@@ -65,13 +65,12 @@ std::vector<Vector2D> alfil::calcularMovimientosValidos(const Tablero& tablero) 
         int c = col + dc;
 
         while (f >= 0 && f < tablero.getFilas() && c >= 0 && c < tablero.getColumnas()) {
-            if (tablero.estaLibre(c, f)) {
+            if (tablero.puedeMoverA(c, f, esBlanca)) {
                 movimientos.push_back(tablero.casillaAPosicion(c, f));
+                if (!tablero.estaLibre(c, f)) break;
             }
             else {
-                if (tablero.hayPiezaContraria(c, f, esBlanca))
-                    movimientos.push_back(tablero.casillaAPosicion(c, f));
-                break; // No puede saltar piezas
+                break;
             }
             f += df;
             c += dc;
