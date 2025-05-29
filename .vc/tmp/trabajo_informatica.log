@@ -1,4 +1,0 @@
-﻿  tablero.cpp
-C:\Users\ANGEL\Documents\GitHub\Los_Transistores_Locos\src\tablero.cpp(28,21): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\ANGEL\Documents\GitHub\Los_Transistores_Locos\src\tablero.cpp(29,21): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-  trabajo_informatica.vcxproj -> C:\Users\ANGEL\Documents\GitHub\Los_Transistores_Locos\bin\trabajo_informatica.exe
