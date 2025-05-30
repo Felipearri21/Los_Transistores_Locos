@@ -2,7 +2,7 @@
 #include "tablero.h"
 
 alfil::alfil(Vector2D pos, bool blanca, float tamCasilla)
-    : Pieza(pos, blanca, TipoPieza::PEON) {
+    : Pieza(pos, blanca, TipoPieza::ALFIL) {
 
     //Calculo de cual tamaño es necesario
     if (tamCasilla >= 130)  // por ejemplo para modo NORMAL

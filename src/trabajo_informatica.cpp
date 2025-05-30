@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     glutKeyboardFunc(OnKeyboard);
     glutMouseFunc(OnMouse);
     glutPassiveMotionFunc(OnPassiveMouseMotion);
-	glutFullScreen();   
+    glutFullScreen();
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_BLEND);
@@ -90,7 +90,7 @@ void OnDisplay()
         Menu_2.set_Fondo("imagenes/fondo_juego_(1920x1080).png");
     }
 
-    // Si está en un modo de juego, dibuja el tablero
+    // Si está en un modo de juego
     if (estado_actual == Estado_Menu::AJEDREZ ||
         estado_actual == Estado_Menu::ALAMOS ||
         estado_actual == Estado_Menu::SILVERMAN)
@@ -98,25 +98,36 @@ void OnDisplay()
         Menu_2.draw_Fondo(Menu_2.get_Fondo());
 
         if (tablero) {
-            tablero->dibujarTablero();
-            tablero->dibujarPiezas();
-        }
-            
+            if (tablero->estaTerminado()) {
+                // Mostrar mensaje final centrado en pantalla
+                std::string texto = tablero->getMensajeFinal();
+                int ancho = calculate_Ancho_Texto(texto, GLUT_BITMAP_TIMES_ROMAN_24);
+                int x = (virtual_Width - ancho) / 2;
+                int y = virtual_Height / 2;
 
-        // Mostrar el texto del modo actual arriba
-        std::string texto;
-        switch (estado_actual) {
-        case Estado_Menu::AJEDREZ: texto = "AJEDREZ NORMAL"; break;
-        case Estado_Menu::ALAMOS: texto = "LOS ALAMOS 6x6"; break;
-        case Estado_Menu::SILVERMAN: texto = "SILVERMAN 4x4"; break;
-        default: break;
-        }
+                glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
+                draw_BitmapText(texto, x, y);
+            }
+            else {
+                tablero->dibujarTablero();
+                tablero->dibujarPiezas();
 
-        int ancho = calculate_Ancho_Texto(texto, GLUT_BITMAP_HELVETICA_18);
-        int x = (virtual_Width - ancho) / 2;
-        int y = virtual_Height - 80;
-        glColor3f(1.0f, 1.0f, 0.6f);
-        draw_BitmapText(texto, x, y);
+                // Mostrar el texto del modo actual arriba
+                std::string texto;
+                switch (estado_actual) {
+                case Estado_Menu::AJEDREZ: texto = "AJEDREZ NORMAL"; break;
+                case Estado_Menu::ALAMOS: texto = "LOS ALAMOS 6x6"; break;
+                case Estado_Menu::SILVERMAN: texto = "SILVERMAN 4x4"; break;
+                default: break;
+                }
+
+                int ancho = calculate_Ancho_Texto(texto, GLUT_BITMAP_HELVETICA_18);
+                int x = (virtual_Width - ancho) / 2;
+                int y = virtual_Height - 80;
+                glColor3f(1.0f, 1.0f, 0.6f);
+                draw_BitmapText(texto, x, y);
+            }
+        }
     }
     else {
         // Si vuelve al menú, borra el tablero si existe
@@ -147,7 +158,7 @@ void OnKeyboard(unsigned char key, int x, int y)
 {
     if (key == 'c') {
         if (tablero) {
-            tablero->toggleCapturaAliados(); 
+            tablero->toggleCapturaAliados();
             std::cout << "Captura de aliados " << (tablero->puedeComerseAliados() ? "activada" : "desactivada") << std::endl;
         }
     }

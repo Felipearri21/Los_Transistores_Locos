@@ -6,6 +6,7 @@
 #include <vector>
 #include "pieza.h"
 #include "peon.h"
+#include <iostream>
 
 class Tablero {
 private:
@@ -17,6 +18,7 @@ private:
     bool gameOver = false;
     Vector2D posPromocion;
     bool colorPromocion;
+    std::string mensajeFinal;
 
     std::vector<Pieza*> piezas;
     void inicializarPiezas();
@@ -49,4 +51,6 @@ public:
     void simularMovimiento(Pieza* pieza, Vector2D destino);
     bool JaqueMate(bool esBlancas);
     ~Tablero();
+    bool estaTerminado() const { return gameOver; }
+    const std::string& getMensajeFinal() const { return mensajeFinal; }
 };
