@@ -14,6 +14,7 @@ struct Vector2D
 	double operator *(const Vector2D&) const; // producto escalar
 	Vector2D operator *(double) const; // producto por un escalar
 	Vector2D operator /(double escalar) const;
+	bool casiIgual(const Vector2D& otro, float epsilon = 0.01f) const;
 };
 
 inline double Vector2D::modulo() const
@@ -57,4 +58,7 @@ inline Vector2D Vector2D::operator /(double escalar) const
 }
 inline bool operator==(const Vector2D& a, const Vector2D& b) {
 	return std::abs(a.x - b.x) < 0.01 && std::abs(a.y - b.y) < 0.01;
+}
+inline bool Vector2D::casiIgual(const Vector2D& otro, float epsilon) const {
+	return (fabs(x - otro.x) < epsilon) && (fabs(y - otro.y) < epsilon);
 }

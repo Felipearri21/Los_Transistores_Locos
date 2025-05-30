@@ -10,9 +10,9 @@
 #include "alfil.h"
 
 
-Tablero::Tablero(ModoJuego modoSeleccionado) : 
+Tablero::Tablero(ModoJuego modoSeleccionado) :
     modo(modoSeleccionado), config(ModoJuegoConfig::obtenerConfigModo(modoSeleccionado)) {
-    
+
     tamCasilla = (1080.0f * 0.7f) / config.filas;// El tamaño de la casilla se adapta según haya más o menos
 
     float anchoTablero = config.columnas * tamCasilla;
@@ -24,19 +24,31 @@ Tablero::Tablero(ModoJuego modoSeleccionado) :
     };
     inicializarPiezas();
 }
-
+void imprimirMensajeFinal(const std::string& mensaje, const std::string& colorCodigo) {
+    std::cout << colorCodigo << mensaje << "\033[0m" << std::endl;
+}
 
 void Tablero::dibujarTablero() {
-    if (gameOver) return;
+    if (gameOver) {
 
+        float posX = origenTablero.x + config.columnas * tamCasilla;
+        float posY = origenTablero.y;
+
+        ImagJaqueMate.setPos(posX, posY);
+        ImagJaqueMate.setSize(500.0f, 500.0f); // tamaño visible
+        ImagJaqueMate.draw();
+
+
+        return;
+    }
     for (int fila = 0; fila < config.filas; ++fila) {
         for (int col = 0; col < config.columnas; ++col) {
             float x = origenTablero.x + col * tamCasilla;
             float y = origenTablero.y + fila * tamCasilla;
 
             // Posición centro de la casilla
-            float centerX = x ;
-            float centerY = y ;
+            float centerX = x;
+            float centerY = y;
 
             if ((fila + col) % 2 == 0) {
                 casillaclara.setPos(centerX, centerY);
@@ -50,6 +62,10 @@ void Tablero::dibujarTablero() {
             }
         }
     }
+    dibujarPiezas();    // Dibuja las piezas
+    if (hayJaqueBlancas || hayJaqueNegras) {
+        dibujarJaque();
+    }
 }
 Tablero::~Tablero() {
     for (Pieza* p : piezas)
@@ -57,14 +73,31 @@ Tablero::~Tablero() {
 }
 void Tablero::dibujarPiezas() const {
     if (gameOver) return;
-    for ( Pieza* p : piezas) {
+    for (Pieza* p : piezas) {
         if (p) p->dibujar();
+    }
+}
+void Tablero::dibujarJaque() {
+    if (!hayJaqueBlancas && !hayJaqueNegras) return;
+
+    float posX = origenTablero.x + config.columnas * tamCasilla + 10; // al lado derecho del tablero
+    float posY = origenTablero.y;
+
+    if (hayJaqueBlancas) {
+        jaqueblancas.setPos(posX, posY);
+        jaqueblancas.setSize(500.0f, 500.0f);
+        jaqueblancas.draw();
+    }
+    if (hayJaqueNegras) {
+        jaquenegras.setPos(posX, posY);
+        jaquenegras.setSize(500.0f, 500.0f);
+        jaquenegras.draw();
     }
 }
 Vector2D Tablero::casillaAPosicion(int col, int fila) const {
     return Vector2D(
-        origenTablero.x + col * tamCasilla ,
-        origenTablero.y + fila * tamCasilla 
+        origenTablero.x + col * tamCasilla,
+        origenTablero.y + fila * tamCasilla
     );
 }
 void Tablero::inicializarPiezas() {
@@ -76,18 +109,18 @@ void Tablero::inicializarPiezas() {
     if (!config.permite(TipoPieza::PEON)) return;
 
     for (int col = 0; col < C; ++col) {
-        
-        piezas.push_back(new Peon(casillaAPosicion(col, 1), true,tamCasilla));// Peones blancos (fila 1)
-        piezas.push_back(new Peon(casillaAPosicion(col, F - 2), false,tamCasilla));// Peones negros (fila Final - 2)
+
+        piezas.push_back(new Peon(casillaAPosicion(col, 1), true, tamCasilla));// Peones blancos (fila 1)
+        piezas.push_back(new Peon(casillaAPosicion(col, F - 2), false, tamCasilla));// Peones negros (fila Final - 2)
     }
     piezas.push_back(new reina(casillaAPosicion((C / 2) - 1, 0), true, tamCasilla));
-    piezas.push_back(new reina(casillaAPosicion((C / 2) - 1, F-1), false, tamCasilla));
+    piezas.push_back(new reina(casillaAPosicion((C / 2) - 1, F - 1), false, tamCasilla));
     piezas.push_back(new rey(casillaAPosicion((C / 2), 0), true, tamCasilla));
     piezas.push_back(new rey(casillaAPosicion((C / 2), F - 1), false, tamCasilla));
     piezas.push_back(new torre(casillaAPosicion(0, 0), true, tamCasilla));
     piezas.push_back(new torre(casillaAPosicion(0, F - 1), false, tamCasilla));
-    piezas.push_back(new torre(casillaAPosicion(C-1, 0), true, tamCasilla));
-    piezas.push_back(new torre(casillaAPosicion(C-1, F - 1), false, tamCasilla));
+    piezas.push_back(new torre(casillaAPosicion(C - 1, 0), true, tamCasilla));
+    piezas.push_back(new torre(casillaAPosicion(C - 1, F - 1), false, tamCasilla));
     if (config.permite(TipoPieza::CABALLO))
     {
         piezas.push_back(new caballo(casillaAPosicion(1, 0), true, tamCasilla));
@@ -107,7 +140,7 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
     if (gameOver) return;
     int col = static_cast<int>((mouseX - origenTablero.x) / tamCasilla);
     int fila = static_cast<int>((mouseY - origenTablero.y) / tamCasilla);
-    
+
     if (col < 0 || col >= config.columnas || fila < 0 || fila >= config.filas)
         return;
 
@@ -173,7 +206,7 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
             // Mover la pieza y cambiar el turno
             piezaSeleccionada->setPosicion(destino);
             ETSIDI::play("sonidos/claves.mp3");
-                 
+
             Peon* peonMovido = dynamic_cast<Peon*>(piezaSeleccionada);
             if (peonMovido) {
                 int filaDestino = static_cast<int>((destino.y - origenTablero.y) / tamCasilla);
@@ -215,11 +248,36 @@ void Tablero::manejarClick(float mouseX, float mouseY) {
             bool colorTurnoAnterior = piezaEnClick ? piezaEnClick->esPiezaBlanca() : !turnoBlancas;
             piezaSeleccionada = nullptr;
             turnoBlancas = !turnoBlancas;
-            if (Jaque(turnoBlancas)) {
-                std::cout << "¡Jaque a las " << (turnoBlancas ? "blancas" : "negras") << "!" << std::endl;
+            bool jaqueBlancasAhora = Jaque(true);
+            bool jaqueNegrasAhora = Jaque(false);
+            hayJaqueBlancas = jaqueBlancasAhora;
+            hayJaqueNegras = jaqueNegrasAhora;
+            if (Jaque(true)) {
+                std::cout << "¡Jaque a las blancas!" << std::endl;
+                if (JaqueMate(true)) {
+                    std::cout << "¡Jaque mate a las blancas!" << std::endl;
+                    gameOver = true;
+                    mensajeFinal = "¡Jaque Mate! ¡Ganan las negras!";
+                    return;
+                }
             }
-            if (JaqueMate(!colorTurnoAnterior)) {
-                mensajeFinal = "¡Jaque Mate! ¡Ganan las " + std::string(colorTurnoAnterior ? "Blancas!" : "Negras!");
+            else if (Jaque(false)) {
+                std::cout << "¡Jaque a las negras!" << std::endl;
+                if (JaqueMate(false)) {
+                    std::cout << "¡Jaque mate a las negras!" << std::endl;
+                    gameOver = true;
+                    mensajeFinal = "¡Jaque Mate! ¡Ganan las blancas!";
+                    return;
+                }
+            }
+            else {
+                std::cout << "No hay jaque." << std::endl;
+                hayJaqueBlancas = false;
+                hayJaqueNegras = false;
+            }
+
+            if (JaqueMate(!turnoBlancas)) {
+                mensajeFinal = "¡Jaque Mate! ¡Ganan las " + std::string(!turnoBlancas ? "Blancas!" : "Negras!");
                 gameOver = true;
                 return;
             }
@@ -309,31 +367,47 @@ bool Tablero::Jaque(bool esBlancas) {
         for (const auto& m : movs) {
             if ((m - posRey).modulo() < tamCasilla / 2)
             {
-                return true; // JAQUE
+                if (esBlancas)
+                    hayJaqueBlancas = true;
+                else
+                    hayJaqueNegras = true;
+                return true;
             }
         }
     }
+    if (esBlancas)
+        hayJaqueBlancas = false;
+    else
+        hayJaqueNegras = false;
 
-    return false; // No está en jaque
+    return false;
 }
 void Tablero::simularMovimiento(Pieza* pieza, Vector2D destino) {
+    std::cout << "Simulando movimiento de pieza tipo " << static_cast<int>(pieza->getTipo())
+        << " de (" << pieza->getPosicion().x << "," << pieza->getPosicion().y << ")"
+        << " a (" << destino.x << "," << destino.y << ")" << std::endl;
+
     // Eliminar pieza rival en destino, si existe
     auto it = std::find_if(piezas.begin(), piezas.end(), [&](Pieza* p) {
         return p && (p->getPosicion() - destino).modulo() < tamCasilla / 2 && p->esPiezaBlanca() != pieza->esPiezaBlanca();
         });
     if (it != piezas.end()) {
+        std::cout << "Capturando pieza rival en destino (" << destino.x << "," << destino.y << ")" << std::endl;
         delete* it;
         piezas.erase(it);
     }
+
     // Mover la pieza
     pieza->setPosicion(destino);
 }
 
+
 bool Tablero::JaqueMate(bool esBlancas) {
+    std::cout << "Entrando en JaqueMate para " << (esBlancas ? "blancas" : "negras") << std::endl;
+
+
     if (!Jaque(esBlancas))
         return false;
-
-    std::cout << "Entrando a JaqueMate para color: " << (esBlancas ? "blancas" : "negras") << std::endl;
 
     for (Pieza* pieza : piezas) {
         if (pieza && pieza->esPiezaBlanca() == esBlancas) {
@@ -346,10 +420,12 @@ bool Tablero::JaqueMate(bool esBlancas) {
 
                 Tablero copia = this->clonar();
 
-                // Buscar pieza equivalente en copia
+                copia.piezaSeleccionada = nullptr;
+
+                // Buscar la pieza clonada equivalente en copia
                 for (Pieza* p : copia.piezas) {
                     if (p &&
-                        p->getPosicion() == pieza->getPosicion() &&
+                        p->getPosicion().casiIgual(pieza->getPosicion()) &&
                         p->getTipo() == pieza->getTipo() &&
                         p->esPiezaBlanca() == pieza->esPiezaBlanca()) {
 
@@ -358,12 +434,16 @@ bool Tablero::JaqueMate(bool esBlancas) {
                     }
                 }
 
-                // Simular el movimiento en copia, eliminando pieza capturada si la hay
+                if (!copia.piezaSeleccionada) {
+                    std::cerr << "Error: piezaSeleccionada no encontrada en la copia." << std::endl;
+                    continue;
+                }
+
                 copia.simularMovimiento(copia.piezaSeleccionada, mov);
 
                 if (!copia.Jaque(esBlancas)) {
                     std::cout << "Movimiento válido para salir del jaque." << std::endl;
-                    return false; // Hay al menos un movimiento que evita el jaque mate
+                    return false; // Hay movimiento que evita jaque mate
                 }
             }
         }
@@ -372,12 +452,32 @@ bool Tablero::JaqueMate(bool esBlancas) {
     std::cout << "No hay movimientos para salir del jaque, es jaque mate." << std::endl;
     return true;
 }
+
 Tablero Tablero::clonar() const {
     Tablero copia = *this;
     copia.piezas.clear();
+
+    // Clonar todas las piezas
     for (Pieza* p : piezas) {
         if (p)
             copia.piezas.push_back(p->clonar());
     }
+
+    // Actualizar piezaSeleccionada a la copia correspondiente
+    if (piezaSeleccionada) {
+        for (Pieza* p : copia.piezas) {
+            if (p &&
+                p->getPosicion().casiIgual(piezaSeleccionada->getPosicion()) &&
+                p->getTipo() == piezaSeleccionada->getTipo() &&
+                p->esPiezaBlanca() == piezaSeleccionada->esPiezaBlanca()) {
+                copia.piezaSeleccionada = p;
+                break;
+            }
+        }
+    }
+    else {
+        copia.piezaSeleccionada = nullptr;
+    }
+
     return copia;
 }
