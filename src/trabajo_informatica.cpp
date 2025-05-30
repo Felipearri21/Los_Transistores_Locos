@@ -100,10 +100,12 @@ void OnDisplay()
         if (tablero) {
             if (tablero->estaTerminado()) {
                 // Mostrar mensaje final centrado en pantalla
+                tablero->dibujajaquemate(); // Dibuja sprite
                 std::string texto = tablero->getMensajeFinal();
+
                 int ancho = calculate_Ancho_Texto(texto, GLUT_BITMAP_TIMES_ROMAN_24);
-                int x = (virtual_Width - ancho) / 2;
-                int y = virtual_Height / 2;
+                int x = 900;
+                int y =  880;
 
                 glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
                 draw_BitmapText(texto, x, y);
@@ -135,6 +137,7 @@ void OnDisplay()
             delete tablero;
             tablero = nullptr;
         }
+        
 
         Menu_1.draw_Menu();
     }

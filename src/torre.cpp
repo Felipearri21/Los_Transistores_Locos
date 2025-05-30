@@ -1,4 +1,4 @@
-#include "torre.h"
+ #include "torre.h"
 #include "tablero.h"
 
 torre::torre(Vector2D pos, bool blanca, float tamCasilla)

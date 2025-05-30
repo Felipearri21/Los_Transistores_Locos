@@ -93,6 +93,7 @@ void Tablero::dibujarJaque() {
         jaquenegras.setSize(500.0f, 500.0f);
         jaquenegras.draw();
     }
+    
 }
 Vector2D Tablero::casillaAPosicion(int col, int fila) const {
     return Vector2D(
@@ -480,4 +481,11 @@ Tablero Tablero::clonar() const {
     }
 
     return copia;
+}
+
+void Tablero::dibujajaquemate()
+{
+    ImagJaqueMate.setPos(660, 100);
+    ImagJaqueMate.setSize(800.0f, 800.0f);
+    ImagJaqueMate.draw();
 }

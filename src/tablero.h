@@ -59,4 +59,5 @@ public:
     ~Tablero();
     bool estaTerminado() const { return gameOver; }
     const std::string& getMensajeFinal() const { return mensajeFinal; }
+    void dibujajaquemate();
 };
